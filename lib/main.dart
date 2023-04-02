@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-void main() {
+import 'config/config_reader.dart';
+import 'config/environment.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ConfigReader.initializeApp(Environment.dev);
   runApp(const MyApp());
 }
 
