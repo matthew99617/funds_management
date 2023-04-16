@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:funds_management/presentation/screen/home/component/to_do_list.dart';
-import 'package:funds_management/shared/bottomNav.dart';
 
 import '../../../model/notes.dart';
 import '../../../shared/icons_data.dart';
@@ -93,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -110,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(scanIcon),
+                        icon: Icon(scanIcon),
                         iconSize: 30,
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
@@ -127,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-        ),
-        bottomNavigationBar: BottomNav());
+        )
+    );
   }
 }

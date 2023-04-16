@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:funds_management/shared/colors.dart';
 
-import 'colors.dart';
-
 class AppThemes {
 
   // lightTheme
@@ -49,9 +47,11 @@ class AppThemes {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: lightBackground,
-      unselectedItemColor: lightModeIcon,
-      selectedItemColor: lightModeIcon,
-    )
+    ),
+    bottomAppBarColor: lightBackground,
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: lightBackground,
+    ),
   );
 
     // darkTheme
@@ -92,8 +92,6 @@ class AppThemes {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: darkBackground,
-      selectedIconTheme: IconThemeData(color: darkModeText),
-      unselectedIconTheme: IconThemeData(color: darkModeText),
     ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: darkBackground,
@@ -101,6 +99,9 @@ class AppThemes {
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: darkBackground,
     ),
-
+    bottomAppBarColor: darkBackground,
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: darkBackground,
+    ),
   );
 }
