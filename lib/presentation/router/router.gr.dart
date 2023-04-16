@@ -11,62 +11,107 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i3;
+import 'package:auto_route/auto_route.dart' as _i4;
+import 'package:flutter/material.dart' as _i5;
 
-import '../screen/home/home_screen.dart' as _i1;
+import '../screen/home/home_screen.dart' as _i2;
+import '../screen/main_home_page.dart' as _i1;
+import '../screen/setting/setting_screen.dart' as _i3;
 
-class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i3.GlobalKey<_i3.NavigatorState>? navigatorKey])
+class AppRouter extends _i4.RootStackRouter {
+  AppRouter([_i5.GlobalKey<_i5.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i2.PageFactory> pagesMap = {
-    HomeScreen.name: (routeData) {
-      final args = routeData.argsAs<HomeScreenArgs>(
-          orElse: () => const HomeScreenArgs());
-      return _i2.MaterialPageX<dynamic>(
+  final Map<String, _i4.PageFactory> pagesMap = {
+    MainHomeRoute.name: (routeData) {
+      return _i4.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i1.HomeScreen(key: args.key),
+        child: const _i1.MainHomePage(),
       );
-    }
+    },
+    HomeRouter.name: (routeData) {
+      final args = routeData.argsAs<HomeRouterArgs>(
+          orElse: () => const HomeRouterArgs());
+      return _i4.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: _i2.HomeScreen(key: args.key),
+      );
+    },
+    SettingRouter.name: (routeData) {
+      return _i4.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i3.SettingScreen(),
+      );
+    },
   };
 
   @override
-  List<_i2.RouteConfig> get routes => [
-        _i2.RouteConfig(
-          '/#redirect',
+  List<_i4.RouteConfig> get routes => [
+        _i4.RouteConfig(
+          MainHomeRoute.name,
           path: '/',
-          redirectTo: '/home_screen',
-          fullMatch: true,
-        ),
-        _i2.RouteConfig(
-          HomeScreen.name,
-          path: '/home_screen',
-        ),
+          children: [
+            _i4.RouteConfig(
+              HomeRouter.name,
+              path: 'home',
+              parent: MainHomeRoute.name,
+            ),
+            _i4.RouteConfig(
+              SettingRouter.name,
+              path: 'setting',
+              parent: MainHomeRoute.name,
+            ),
+          ],
+        )
       ];
 }
 
 /// generated route for
-/// [_i1.HomeScreen]
-class HomeScreen extends _i2.PageRouteInfo<HomeScreenArgs> {
-  HomeScreen({_i3.Key? key})
+/// [_i1.MainHomePage]
+class MainHomeRoute extends _i4.PageRouteInfo<void> {
+  const MainHomeRoute({List<_i4.PageRouteInfo>? children})
       : super(
-          HomeScreen.name,
-          path: '/home_screen',
-          args: HomeScreenArgs(key: key),
+          MainHomeRoute.name,
+          path: '/',
+          initialChildren: children,
         );
 
-  static const String name = 'HomeScreen';
+  static const String name = 'MainHomeRoute';
 }
 
-class HomeScreenArgs {
-  const HomeScreenArgs({this.key});
+/// generated route for
+/// [_i2.HomeScreen]
+class HomeRouter extends _i4.PageRouteInfo<HomeRouterArgs> {
+  HomeRouter({_i5.Key? key})
+      : super(
+          HomeRouter.name,
+          path: 'home',
+          args: HomeRouterArgs(key: key),
+        );
 
-  final _i3.Key? key;
+  static const String name = 'HomeRouter';
+}
+
+class HomeRouterArgs {
+  const HomeRouterArgs({this.key});
+
+  final _i5.Key? key;
 
   @override
   String toString() {
-    return 'HomeScreenArgs{key: $key}';
+    return 'HomeRouterArgs{key: $key}';
   }
+}
+
+/// generated route for
+/// [_i3.SettingScreen]
+class SettingRouter extends _i4.PageRouteInfo<void> {
+  const SettingRouter()
+      : super(
+          SettingRouter.name,
+          path: 'setting',
+        );
+
+  static const String name = 'SettingRouter';
 }
