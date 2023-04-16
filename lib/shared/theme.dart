@@ -44,6 +44,14 @@ class AppThemes {
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: lightBackground,
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: lightBackground,
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: lightBackground,
+      unselectedItemColor: lightModeIcon,
+      selectedItemColor: lightModeIcon,
+    )
   );
 
     // darkTheme
@@ -90,5 +98,9 @@ class AppThemes {
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: darkBackground,
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: darkBackground,
+    ),
+
   );
 }

@@ -21,7 +21,7 @@ class _BottomNavState extends State<BottomNav> {
     });
     switch (index) {
       case 0:
-        // AutoRouter.of(context).pushNamed("/setting_screen");
+      // AutoRouter.of(context).pushNamed("/setting_screen");
         break;
       case 1:
         break;
