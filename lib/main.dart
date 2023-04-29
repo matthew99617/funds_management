@@ -8,6 +8,7 @@ import 'config/environment.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await ConfigReader.initializeApp(Environment.dev);
+  final _appRouter = AppRouter();
   runApp(
       MultiBlocProvider(
         providers: [
@@ -15,18 +16,26 @@ void main() async{
             create: (context) => ThemeChangeCubit(),
           ),
         ],
-        child: MyApp(),
+        child: MyApp(
+          appRouter: _appRouter,
+        ),
       )
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  final AppRouter _appRouter;
+
+  const MyApp({
+    Key? key,
+    required AppRouter appRouter,
+  }) : _appRouter = appRouter,
+        super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final _appRouter = AppRouter();
     return BlocBuilder<ThemeChangeCubit, ThemeChangeState>(
       builder: (context, state) {
         return MaterialApp.router(
@@ -34,6 +43,7 @@ class MyApp extends StatelessWidget {
           theme: state.themeData,
           routerDelegate: _appRouter.delegate(),
           routeInformationParser: _appRouter.defaultRouteParser(),
+          builder: (context, router) => router!,
         );
       },
     );

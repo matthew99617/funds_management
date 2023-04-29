@@ -12,6 +12,8 @@ class MainHomePage extends StatelessWidget {
     return AutoTabsScaffold(
       routes: [
         HomeRouter(),
+        CalendarRouter(),
+        RecordRouter(),
         SettingRouter(),
       ],
       bottomNavigationBuilder: (context, tabsRouter) => BottomNav(

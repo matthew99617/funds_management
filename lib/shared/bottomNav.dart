@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
 import 'icons_data.dart';
 
 class BottomNav extends StatefulWidget {
@@ -16,6 +15,7 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       items:  const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(homeIcon),

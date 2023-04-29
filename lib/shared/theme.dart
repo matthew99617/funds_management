@@ -47,10 +47,8 @@ class AppThemes {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: lightBackground,
-    ),
-    bottomAppBarColor: lightBackground,
-    bottomAppBarTheme: BottomAppBarTheme(
-      color: lightBackground,
+      selectedItemColor: lightModeText,
+      unselectedItemColor: lightModeText,
     ),
   );
 
@@ -92,16 +90,14 @@ class AppThemes {
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: darkBackground,
+      selectedItemColor: darkModeText,
+      unselectedItemColor: darkModeText,
     ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: darkBackground,
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: darkBackground,
-    ),
-    bottomAppBarColor: darkBackground,
-    bottomAppBarTheme: BottomAppBarTheme(
-      color: darkBackground,
     ),
   );
 }

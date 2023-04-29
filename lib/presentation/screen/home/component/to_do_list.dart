@@ -6,7 +6,7 @@ import '../../../../model/notes.dart';
 class ListToDo extends StatefulWidget {
   final List<Notes> toDoList;
 
-  ListToDo({super.key, required this.toDoList});
+  const ListToDo({super.key, required this.toDoList});
 
   @override
   State<ListToDo> createState() => _ListToDoState();
