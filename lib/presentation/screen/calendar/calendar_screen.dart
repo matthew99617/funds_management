@@ -29,8 +29,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
         body: ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           controller: _scrollController,
           itemCount: 12,
           itemBuilder: (context, index) {
@@ -38,6 +40,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             return _buildMonthCalendar(date);
           },
         ),
+      ),
     );
   }
 
@@ -62,6 +65,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
         ),
         GridView.count(
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           crossAxisCount: 7,
           childAspectRatio: 1,
