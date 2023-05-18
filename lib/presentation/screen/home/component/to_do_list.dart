@@ -17,46 +17,48 @@ class _ListToDoState extends State<ListToDo> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 0.7,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      alignment: Alignment.center,
-      child: widget.toDoList.length == 0
-          ? Center(
-        child: Text(
-          "No Forward Plan",
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
+    return Expanded(
+      child: Container(
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        alignment: Alignment.center,
+        child: widget.toDoList.length == 0
+            ? Center(
+          child: Text(
+            "No Forward Plan",
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-      ) : Scrollbar(
-        thumbVisibility: true,
-        controller: scrollController,
-        child: ListView.separated(
+        ) : Scrollbar(
+          thumbVisibility: true,
           controller: scrollController,
-          scrollDirection: Axis.vertical,
-          itemCount: widget.toDoList.length,
-          primary: false,
-          itemBuilder: (BuildContext context, int index) {
-            return _buildToDoItem(
-              widget.toDoList[index].title,
-              widget.toDoList[index].startDate,
-              widget.toDoList[index].endDate,
-              _calDateStatus(widget.toDoList[index].startDate,
-                  widget.toDoList[index].endDate),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) =>
-          const Divider(
-            // color: Colors.black,
-            thickness: 2,
+          child: ListView.separated(
+            controller: scrollController,
+            scrollDirection: Axis.vertical,
+            itemCount: widget.toDoList.length,
+            primary: false,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildToDoItem(
+                widget.toDoList[index].title,
+                widget.toDoList[index].startDate,
+                widget.toDoList[index].endDate,
+                _calDateStatus(widget.toDoList[index].startDate,
+                    widget.toDoList[index].endDate),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+            const Divider(
+              // color: Colors.black,
+              thickness: 2,
+            ),
           ),
         ),
       ),
