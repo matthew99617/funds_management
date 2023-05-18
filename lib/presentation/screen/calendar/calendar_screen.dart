@@ -12,6 +12,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
   final ScrollController _scrollController = ScrollController();
 
   DateTime today = DateTime.now();
+  DateTime firstYear = DateTime.utc(DateTime.now().year.toInt() - 5 , 12, 31);
+  DateTime lastYear = DateTime.utc(DateTime.now().year.toInt() + 5 , 12, 31);
+
   void _onDaySelected(DateTime day, DateTime focusedDate){
     setState(() {
       today = day;
@@ -26,29 +29,33 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   Widget content(){
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: <Widget>[
-          Text("Selected Day = " + today.toString().split(" ")[0]),
-          Container(
-            child: TableCalendar(
-              locale: "en_US",
-              rowHeight: 43,
-              headerStyle: HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: <Widget>[
+            Text("Selected Day = ${today.toString().split(" ")[0]}"),
+            Container(
+              child: TableCalendar(
+                locale: "en_US",
+                rowHeight: 43,
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                ),
+                availableGestures: AvailableGestures.all,
+                selectedDayPredicate: (day) => isSameDay(day, today),
+                focusedDay: today,
+                firstDay: firstYear,
+                lastDay: lastYear,
+                onDaySelected: _onDaySelected,
               ),
-              availableGestures: AvailableGestures.all,
-              selectedDayPredicate: (day) => isSameDay(day, today),
-              focusedDay: today,
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              onDaySelected: _onDaySelected,
             ),
-          )
-        ],
-      ),
+            SizedBox(height: 10),
+            Text("123123123"),
+          ],
+        ),
+      )
     );
   }
 }
