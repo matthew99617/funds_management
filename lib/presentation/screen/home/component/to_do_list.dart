@@ -26,7 +26,7 @@ class _ListToDoState extends State<ListToDo> {
         width: MediaQuery
             .of(context)
             .size
-            .width,
+            .width * 0.9,
         alignment: Alignment.center,
         child: widget.toDoList.length == 0
             ? Center(
