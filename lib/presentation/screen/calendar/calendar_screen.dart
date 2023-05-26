@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:funds_management/presentation/screen/calendar/component/plans_titile_group_list.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -52,7 +53,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
             ),
             SizedBox(height: 10),
-            Text("123123123"),
+            PlansTitleGroupList(),
           ],
         ),
       )

@@ -50,6 +50,11 @@ class AppThemes {
       selectedItemColor: lightModeText,
       unselectedItemColor: lightModeText,
     ),
+    expansionTileTheme: ExpansionTileThemeData(
+      backgroundColor: lightBackground,
+      collapsedTextColor: lightModeText,
+      collapsedIconColor: lightModeIcon,
+    ),
   );
 
     // darkTheme
@@ -98,6 +103,11 @@ class AppThemes {
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: darkBackground,
+    ),
+    expansionTileTheme: ExpansionTileThemeData(
+      backgroundColor: darkBackground,
+      collapsedTextColor: darkModeText,
+      collapsedIconColor: darkModeIcon,
     ),
   );
 }
