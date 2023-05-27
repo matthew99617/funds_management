@@ -22,46 +22,55 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static List<Notes> toDoList = [
     Notes(
+        id: 1,
         title: 'What to do 1',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 02, 24),
         endDate: DateTime.utc(2023, 02, 24)),
     Notes(
+        id: 2,
         title: 'What to do 6',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 02, 01),
         endDate: DateTime.utc(2023, 02, 05)),
     Notes(
+        id: 3,
         title: 'What to do 5',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 02, 27),
         endDate: DateTime.utc(2023, 02, 28)),
     Notes(
+        id: 4,
         title: 'What to do 3',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 02, 01),
         endDate: DateTime.utc(2023, 02, 04)),
     Notes(
+        id: 5,
         title: 'What to do 4',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 02, 04),
         endDate: DateTime.utc(2023, 02, 24)),
     Notes(
+        id: 6,
         title: 'What to do 7',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 03, 04),
         endDate: DateTime.utc(2023, 03, 18)),
     Notes(
+        id: 7,
         title: 'What to do 8',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 05, 04),
         endDate: DateTime.utc(2023, 05, 18)),
     Notes(
+        id: 8,
         title: 'What to do 9',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 09, 04),
         endDate: DateTime.utc(2023, 09, 18)),
     Notes(
+        id: 9,
         title: 'What to do 10',
         notes: 'Testing 123',
         startDate: DateTime.utc(2023, 02, 06),

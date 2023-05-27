@@ -1,10 +1,12 @@
 class Notes{
+  final int id;
   final String title;
   final String notes;
   final DateTime endDate;
   final DateTime startDate;
 
   Notes({
+    required this.id,
     required this.title,
     required this.notes,
     required this.startDate,
@@ -13,6 +15,7 @@ class Notes{
 
   factory Notes.fromJson(Map<String, dynamic> json){
     return Notes(
+      id: json[''],
       title: json[''],
       notes: json[''],
       startDate: json[''],
