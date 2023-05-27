@@ -14,7 +14,7 @@ class _PlansTitleGroupListState extends State<PlansTitleGroupList> {
     return Flexible(
       child: basicTiles.isEmpty ? Center(
         child: Text(
-          "No Forward Plan",
+          "No Forward Plans",
           style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
@@ -28,7 +28,17 @@ class _PlansTitleGroupListState extends State<PlansTitleGroupList> {
   
   Widget buildTile(BasicTile tile){
     if (tile.tiles.isEmpty){
-      return Text(tile.title);
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+        child: ListTile(
+          onTap: () {
+            print("Tile: 123");
+          },
+          title: Text(
+              tile.title
+          ),
+        ),
+      );
     } else {
       return ExpansionTile(
         title: Text(tile.title),

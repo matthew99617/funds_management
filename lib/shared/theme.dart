@@ -51,10 +51,13 @@ class AppThemes {
       unselectedItemColor: lightModeText,
     ),
     expansionTileTheme: ExpansionTileThemeData(
-      backgroundColor: lightBackground,
+      collapsedBackgroundColor: lightModeSelectedExpandedTile,
       collapsedTextColor: lightModeText,
       collapsedIconColor: lightModeIcon,
     ),
+      listTileTheme: ListTileThemeData(
+        textColor: lightModeText,
+      )
   );
 
     // darkTheme
@@ -105,9 +108,12 @@ class AppThemes {
       backgroundColor: darkBackground,
     ),
     expansionTileTheme: ExpansionTileThemeData(
-      backgroundColor: darkBackground,
+      backgroundColor: darkModeSelectedExpandedTile,
       collapsedTextColor: darkModeText,
       collapsedIconColor: darkModeIcon,
+    ),
+    listTileTheme: ListTileThemeData(
+      textColor: darkModeText,
     ),
   );
 }

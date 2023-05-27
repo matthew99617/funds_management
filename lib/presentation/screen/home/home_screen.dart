@@ -1,5 +1,8 @@
+import 'dart:core';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:funds_management/presentation/screen/home/component/to_do_list.dart';
+import 'package:funds_management/shared/share_preference_helper.dart';
 
 import '../../../model/notes.dart';
 import '../../../shared/icons_data.dart';
@@ -14,6 +17,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  // final String encodeData = Notes.encode
+
   static List<Notes> toDoList = [
     Notes(
         title: 'What to do 1',
@@ -61,6 +67,26 @@ class _HomeScreenState extends State<HomeScreen> {
         startDate: DateTime.utc(2023, 02, 06),
         endDate: DateTime.utc(2023, 02, 18)),
   ];
+
+  static List<Notes> savedList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // _saveList();
+    // _loadList();
+  }
+  // _saveList() {
+  //   setState(() {
+  //     SharePreferenceHelper.saveListData(toDoList);
+  //   });
+  // }
+  //
+  // _loadList() {
+  //   setState(() {
+  //     savedList = SharePreferenceHelper.getListData() as List<Notes>;
+  //   });
+  // }
 
   static List<Notes> sortByDay(List<Notes> dates) {
     dates.sort((a, b) {
