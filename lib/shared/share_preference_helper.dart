@@ -9,13 +9,13 @@ class SharePreferenceHelper {
   // Write List DATA
   static Future<bool> saveListData(value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return await sharedPreferences.setString(listValueSharedPreferences, value);
+    return await sharedPreferences.setStringList(listValueSharedPreferences, value);
   }
 
   // Read List Data
   static Future getListData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString(listValueSharedPreferences);
+    return sharedPreferences.getStringList(listValueSharedPreferences);
   }
 
   // Write DATA

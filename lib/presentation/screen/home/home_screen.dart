@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  // final String encodeData = Notes.encode
+  static List<Notes> savedList = [];
 
   static List<Notes> toDoList = [
     Notes(
@@ -77,25 +77,27 @@ class _HomeScreenState extends State<HomeScreen> {
         endDate: DateTime.utc(2023, 02, 18)),
   ];
 
-  static List<Notes> savedList = [];
+  List<String> jsonList = toDoList.map((note) => note.toEncodeString()).toList();
+
+  // https://medium.com/@hasimyerlikaya/flutter-custom-datetime-serialization-with-jsonconverter-5f57f93d537
 
   @override
   void initState() {
     super.initState();
-    // _saveList();
-    // _loadList();
+    _saveList();
+    _loadList();
   }
-  // _saveList() {
-  //   setState(() {
-  //     SharePreferenceHelper.saveListData(toDoList);
-  //   });
-  // }
-  //
-  // _loadList() {
-  //   setState(() {
-  //     savedList = SharePreferenceHelper.getListData() as List<Notes>;
-  //   });
-  // }
+  _saveList() {
+    setState(() {
+      SharePreferenceHelper.saveListData(jsonList);
+    });
+  }
+
+  _loadList() {
+    setState(() {
+      savedList = SharePreferenceHelper.getListData() as List<Notes>;
+    });
+  }
 
   static List<Notes> sortByDay(List<Notes> dates) {
     dates.sort((a, b) {
@@ -119,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList();
   }
 
-  static List<Notes> filterMonthList = filterDataByCurrentMonth(toDoList);
+  static List<Notes> filterMonthList = filterDataByCurrentMonth(savedList);
   static List<Notes> display_toDoList = sortByDay(filterMonthList);
 
   @override

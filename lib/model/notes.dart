@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Notes{
   final int id;
   final String title;
@@ -13,15 +15,27 @@ class Notes{
     required this.endDate,
   });
 
-  factory Notes.fromJson(Map<String, dynamic> json){
+  String toEncodeString() => json.encode(toMap());
+
+  factory Notes.decode(String str) => Notes.fromMap(json.decode(str));
+
+  factory Notes.fromMap(Map<String, dynamic> json){
     return Notes(
-      id: json[''],
-      title: json[''],
-      notes: json[''],
-      startDate: json[''],
-      endDate: json[''],
+      id: json['id'],
+      title: json['title'],
+      notes: json['notes'],
+      startDate: json['startDate'],
+      endDate: json['endDate'],
     );
   }
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "title": title,
+    "notes": notes,
+    "startDate": startDate,
+    "endDate": endDate,
+  };
 
   sortByDate (List<Notes> notes) {
     notes.sort((a, b) =>
