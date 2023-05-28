@@ -26,7 +26,7 @@ class AppRouter extends _i6.RootStackRouter {
 
   @override
   final Map<String, _i6.PageFactory> pagesMap = {
-    MainHomeRoute.name: (routeData) {
+    MainHomePage.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.MainHomePage(),
@@ -43,11 +43,9 @@ class AppRouter extends _i6.RootStackRouter {
       );
     },
     CalendarRouter.name: (routeData) {
-      final args = routeData.argsAs<CalendarRouterArgs>(
-          orElse: () => const CalendarRouterArgs());
       return _i6.CustomPage<dynamic>(
         routeData: routeData,
-        child: _i3.CalendarScreen(key: args.key),
+        child: const _i3.CalendarScreen(),
         opaque: true,
         barrierDismissible: false,
       );
@@ -75,28 +73,28 @@ class AppRouter extends _i6.RootStackRouter {
   @override
   List<_i6.RouteConfig> get routes => [
         _i6.RouteConfig(
-          MainHomeRoute.name,
+          MainHomePage.name,
           path: '/',
           children: [
             _i6.RouteConfig(
               HomeRouter.name,
               path: 'home',
-              parent: MainHomeRoute.name,
+              parent: MainHomePage.name,
             ),
             _i6.RouteConfig(
               CalendarRouter.name,
               path: 'calendar',
-              parent: MainHomeRoute.name,
+              parent: MainHomePage.name,
             ),
             _i6.RouteConfig(
               RecordRouter.name,
               path: 'record',
-              parent: MainHomeRoute.name,
+              parent: MainHomePage.name,
             ),
             _i6.RouteConfig(
               SettingRouter.name,
               path: 'setting',
-              parent: MainHomeRoute.name,
+              parent: MainHomePage.name,
             ),
           ],
         )
@@ -105,15 +103,15 @@ class AppRouter extends _i6.RootStackRouter {
 
 /// generated route for
 /// [_i1.MainHomePage]
-class MainHomeRoute extends _i6.PageRouteInfo<void> {
-  const MainHomeRoute({List<_i6.PageRouteInfo>? children})
+class MainHomePage extends _i6.PageRouteInfo<void> {
+  const MainHomePage({List<_i6.PageRouteInfo>? children})
       : super(
-          MainHomeRoute.name,
+          MainHomePage.name,
           path: '/',
           initialChildren: children,
         );
 
-  static const String name = 'MainHomeRoute';
+  static const String name = 'MainHomePage';
 }
 
 /// generated route for
@@ -142,26 +140,14 @@ class HomeRouterArgs {
 
 /// generated route for
 /// [_i3.CalendarScreen]
-class CalendarRouter extends _i6.PageRouteInfo<CalendarRouterArgs> {
-  CalendarRouter({_i7.Key? key})
+class CalendarRouter extends _i6.PageRouteInfo<void> {
+  const CalendarRouter()
       : super(
           CalendarRouter.name,
           path: 'calendar',
-          args: CalendarRouterArgs(key: key),
         );
 
   static const String name = 'CalendarRouter';
-}
-
-class CalendarRouterArgs {
-  const CalendarRouterArgs({this.key});
-
-  final _i7.Key? key;
-
-  @override
-  String toString() {
-    return 'CalendarRouterArgs{key: $key}';
-  }
 }
 
 /// generated route for

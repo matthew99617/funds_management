@@ -77,27 +77,27 @@ class _HomeScreenState extends State<HomeScreen> {
         endDate: DateTime.utc(2023, 02, 18)),
   ];
 
-  List<String> jsonList = toDoList.map((note) => note.toEncodeString()).toList();
+  // List<String> jsonList = toDoList.map((note) => note.toEncodeString()).toList();
 
   // https://medium.com/@hasimyerlikaya/flutter-custom-datetime-serialization-with-jsonconverter-5f57f93d537
 
   @override
   void initState() {
     super.initState();
-    _saveList();
-    _loadList();
+    // _saveList();
+    // _loadList();
   }
-  _saveList() {
-    setState(() {
-      SharePreferenceHelper.saveListData(jsonList);
-    });
-  }
-
-  _loadList() {
-    setState(() {
-      savedList = SharePreferenceHelper.getListData() as List<Notes>;
-    });
-  }
+  // _saveList() {
+  //   setState(() {
+  //     SharePreferenceHelper.saveListData(jsonList);
+  //   });
+  // }
+  //
+  // _loadList() {
+  //   setState(() {
+  //     savedList = SharePreferenceHelper.getListData() as List<Notes>;
+  //   });
+  // }
 
   static List<Notes> sortByDay(List<Notes> dates) {
     dates.sort((a, b) {
