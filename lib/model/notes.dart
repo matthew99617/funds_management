@@ -1,10 +1,5 @@
 import 'dart:convert';
 
-import 'package:funds_management/shared/custom_datetime_converter.dart';
-import 'package:json_annotation/json_annotation.dart';
-
-@JsonSerializable()
-@CustomDateTimeConverter()
 class Notes{
   final int id;
   final String title;
@@ -20,32 +15,34 @@ class Notes{
     required this.endDate,
   });
 
-  // factory Notes.fromJson(Map<String, dynamic> json) =>
-  //     _$NotesFromJson(json);
-  //
-  // Map<String, dynamic> toJson() => _$NotesToJson(this);
+  factory Notes.fromMap(Map<String, dynamic> json){
+    return Notes(
+      id: json['id'],
+      title: json['title'],
+      notes: json['notes'],
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
+    );
+  }
 
-  // String toEncodeString() => json.encode(toMap());
-  //
-  // factory Notes.decode(String str) => Notes.fromMap(json.decode(str));
-  //
-  // factory Notes.fromMap(Map<String, dynamic> json){
-  //   return Notes(
-  //     id: json['id'],
-  //     title: json['title'],
-  //     notes: json['notes'],
-  //     startDate: json['startDate'],
-  //     endDate: json['endDate'],
-  //   );
-  // }
-  //
-  // Map<String, dynamic> toMap() => {
-  //   "id": id,
-  //   "title": title,
-  //   "notes": notes,
-  //   "startDate": startDate,
-  //   "endDate": endDate,
-  // };
+  static Map<String, dynamic> toJson(Notes note) => {
+    'id': note.id,
+    'title': note.title,
+    'notes': note.notes,
+    'startDate': note.startDate.toIso8601String(),
+    'endDate': note.endDate.toIso8601String(),
+  };
+
+  static String encode(List<Notes> notes) => json.encode(
+    notes
+        .map<Map<String, dynamic>>((note) => Notes.toJson(note))
+        .toList(),
+  );
+
+  static List<Notes> decode(String data) =>
+      (json.decode(data) as List<dynamic>)
+          .map<Notes>((item) => Notes.fromMap(item))
+          .toList();
 
   sortByDate (List<Notes> notes) {
     notes.sort((a, b) =>

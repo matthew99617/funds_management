@@ -84,20 +84,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // _saveList();
-    // _loadList();
+    _saveList();
+    _loadList();
   }
-  // _saveList() {
-  //   setState(() {
-  //     SharePreferenceHelper.saveListData(jsonList);
-  //   });
-  // }
-  //
-  // _loadList() {
-  //   setState(() {
-  //     savedList = SharePreferenceHelper.getListData() as List<Notes>;
-  //   });
-  // }
+  _saveList() {
+    setState(() {
+      final String encodeData = Notes.encode(toDoList);
+      SharePreferenceHelper.saveListData(encodeData);
+    });
+  }
+
+  Future _loadList() async {
+    final dataStr = await SharePreferenceHelper.getListData();
+    setState(() {
+      savedList = Notes.decode(dataStr);
+      print("dataStr: $dataStr");
+    });
+  }
 
   static List<Notes> sortByDay(List<Notes> dates) {
     dates.sort((a, b) {
@@ -120,9 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
             data.startDate.year == now.year)
         .toList();
   }
-
-  static List<Notes> filterMonthList = filterDataByCurrentMonth(savedList);
-  static List<Notes> display_toDoList = sortByDay(filterMonthList);
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   thickness: 1,
                 ),
                 SizedBox(height: 2),
-                ListToDo(toDoList: display_toDoList),
+                ListToDo(toDoList: sortByDay(filterDataByCurrentMonth(savedList))),
               ],
             ),
           ),
