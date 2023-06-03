@@ -5,6 +5,8 @@ import '../model/notes.dart';
 class SharePreferenceHelper {
   static String listValueSharedPreferences = 'saveList';
   static String recordValueSharedPreferences = 'saveRecord';
+  static String themeValueSharedPreferences = 'themeData';
+
 
   // Write List DATA
   static Future<bool> saveListData(value) async {
@@ -28,5 +30,15 @@ class SharePreferenceHelper {
   static Future getRecordData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getStringList(recordValueSharedPreferences);
+  }
+
+  static Future saveTheme(value) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.setBool(themeValueSharedPreferences, value);
+  }
+
+  static Future getTheme() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getBool(themeValueSharedPreferences);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:funds_management/shared/colors.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 
 class AppThemes {
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:funds_management/bloc/cubit/theme/theme_change_cubit.dart';
 
+import '../../../../shared/share_preference_helper.dart';
+
 class SwitchModeButton extends StatefulWidget {
   const SwitchModeButton({Key? key}) : super(key: key);
 

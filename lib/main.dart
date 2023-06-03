@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:funds_management/presentation/router/router.gr.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'bloc/cubit/theme/theme_change_cubit.dart';
 import 'config/config_reader.dart';
 import 'config/environment.dart';
@@ -9,7 +10,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await ConfigReader.initializeApp(Environment.dev);
   final _appRouter = AppRouter();
-  runApp(
+  initializeDateFormatting().then((_) => runApp(
       MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -19,8 +20,8 @@ void main() async{
         child: MyApp(
           appRouter: _appRouter,
         ),
-      )
-  );
+      ),
+  ));
 }
 
 class MyApp extends StatelessWidget {
