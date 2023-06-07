@@ -34,6 +34,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
     super.dispose();
   }
 
+  void calendarTapped(CalendarTapDetails calendarTapDetails) {
+    if (calendarTapDetails.targetElement == CalendarElement.appointment ||
+        calendarTapDetails.targetElement == CalendarElement.agenda) {
+      Notes notes = calendarTapDetails.appointments![0];
+      print('123: ${notes.title}');
+    }
+  }
+
   Future loadData() async{
     final dataStr = await SharePreferenceHelper.getListData();
     setState(() {
@@ -99,6 +107,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               showAgenda: true,
               appointmentDisplayCount: 2,
             ),
+            onTap: calendarTapped,
             viewNavigationMode: ViewNavigationMode.snap,
             backgroundColor: Colors.grey,
             firstDayOfWeek: 1,
