@@ -67,10 +67,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
       body: content(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () =>{
-          // BottomSheet(
-          //   onClosing: onClosing,
-          //   builder: builder,
-          // ),
+          showModalBottomSheet(
+              constraints: BoxConstraints.loose(Size(
+                  MediaQuery.of(context).size.width,
+                  MediaQuery.of(context).size.height * 0.75)), // <= this is set to 3/4 of screen size.
+              isScrollControlled: true, // <= set to true. setting this without constrains may cause full screen bottomsheet.
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(45.0),
+                ),
+              ),
+              context: context,
+              builder: (context) => Container(
+                child: Center(
+                  child: Text("Modal content geos here"),
+                ),
+              )
+          )
         },
         label: Text("Add Event"),
         icon: Icon(Icons.add),
@@ -82,30 +95,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        // child: Column(
-        //   children: <Widget>[
-        //     Text("Selected Day = ${today.toString().split(" ")[0]}"),
-        //     Container(
-        //       child: SfCalendar(
-        //         view: CalendarView.month,
-        //         dataSource: NotesDataSource(savedList),
-        //         monthViewSettings: const MonthViewSettings(
-        //           showAgenda: true,
-        //         ),
-        //         viewNavigationMode: ViewNavigationMode.snap,
-        //         firstDayOfWeek: 1,
-        //       ),
-        //     ),
-        //     // SizedBox(height: 10),
-        //     // PlansTitleGroupList(),
-        //   ],
-        // ),
         child: SfCalendar(
             view: CalendarView.month,
             dataSource: NotesDataSource(savedList),
             monthViewSettings: const MonthViewSettings(
               showAgenda: true,
-              appointmentDisplayCount: 2,
+              appointmentDisplayCount: 4,
             ),
             onTap: calendarTapped,
             viewNavigationMode: ViewNavigationMode.snap,
