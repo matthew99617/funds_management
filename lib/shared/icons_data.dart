@@ -7,6 +7,7 @@ const IconData homeIcon = Icons.home_outlined;
 const IconData calendarIcon = Icons.calendar_month_outlined;
 const IconData recordIcon = Icons.edit_note_outlined;
 const IconData settingIcon = Icons.settings;
+const IconData dateIcon = Icons.date_range_outlined;
 
 // Home needed Icon
 const IconData arrowUpIcon = Icons.arrow_drop_up_outlined;

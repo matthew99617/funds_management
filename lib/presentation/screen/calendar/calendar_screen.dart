@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:funds_management/model/notes_data_source.dart';
+import 'package:funds_management/presentation/screen/calendar/component/calendar_bottom_sheet.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../model/notes.dart';
@@ -70,7 +71,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           showModalBottomSheet(
               constraints: BoxConstraints.loose(Size(
                   MediaQuery.of(context).size.width,
-                  MediaQuery.of(context).size.height * 0.75)), // <= this is set to 3/4 of screen size.
+                  MediaQuery.of(context).size.height * 0.6)), // <= this is set to 3/4 of screen size.
               isScrollControlled: true, // <= set to true. setting this without constrains may cause full screen bottomsheet.
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
@@ -78,11 +79,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
               context: context,
-              builder: (context) => Container(
-                child: Center(
-                  child: Text("Modal content geos here"),
-                ),
-              )
+              builder: (context) =>
+            CalendarBottomSheet(),
           )
         },
         label: Text("Add Event"),
