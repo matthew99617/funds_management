@@ -13,6 +13,7 @@ class CalendarBottomSheet extends StatefulWidget {
   final String? notes;
   final DateTime? startDate;
   final DateTime? endDate;
+
   CalendarBottomSheet({Key? key, this.title, this.notes, this.startDate, this.endDate}) : super(key: key);
 
   @override
@@ -56,8 +57,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: darkBackground,
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(30),
       child: Form(
         key: _formKey,
         child: Column(

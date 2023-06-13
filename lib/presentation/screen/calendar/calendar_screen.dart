@@ -69,18 +69,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () =>{
           showModalBottomSheet(
-              constraints: BoxConstraints.loose(Size(
-                  MediaQuery.of(context).size.width,
-                  MediaQuery.of(context).size.height * 0.6)), // <= this is set to 3/4 of screen size.
-              isScrollControlled: true, // <= set to true. setting this without constrains may cause full screen bottomsheet.
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(45.0),
-                ),
-              ),
-              context: context,
-              builder: (context) =>
-            CalendarBottomSheet(),
+            context: context,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(45.0),
+              )
+            ),
+            builder: (context) {
+              return CalendarBottomSheet();
+            }
           )
         },
         label: Text("Add Event"),
