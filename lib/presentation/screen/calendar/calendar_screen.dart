@@ -58,10 +58,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return days;
   }
 
-  void _onDaySelected(DateTime day, DateTime focusedDate){
-    today = day;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -26,6 +26,10 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   final myControllerDescription = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
+  TextEditingController dateInput = TextEditingController();
+
+  DateTime firstYear = DateTime.utc(DateTime.now().year.toInt() - 1 , 12, 31);
+  DateTime lastYear = DateTime.utc(DateTime.now().year.toInt() + 1 , 12, 31);
 
   @override
   void dispose() {
@@ -37,6 +41,12 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.startDate == null){
+      dateInput.text = "";
+    } else {
+      dateInput.text = widget.startDate.toString();
+    }
 
     myControllerTitle.addListener((){
       _printTitle();
@@ -57,6 +67,14 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery
+          .of(context)
+          .size
+          .height,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       padding: EdgeInsets.all(30),
       child: Form(
         key: _formKey,
@@ -114,30 +132,72 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                 return v!.trim().isNotEmpty ? null : "You don't have any change on Descriptions!!";
               },
             ),
-            // DateTimeFormField(
-            //   dateFormat: DateFormat("yyyy-mm-dd"),
-            //   onDateSelected: (DateTime value){
-            //     print(value);
-            //   },
-            //   firstDate: widget.startDate != null ? widget.startDate!.toUtc().add(const Duration(days: 10))
-            //       : DateTime.now().add(const Duration(days: 10)),
-            //   lastDate: widget.startDate != null ? widget.startDate!.toUtc().add(const Duration(days: 40))
-            //       : DateTime.now().add(const Duration(days: 40)),
-            //   initialDate: widget.startDate != null ? widget.startDate!.toUtc().add(const Duration(days: 20))
-            //       : DateTime.now().add(const Duration(days: 20)),
-            //   decoration: InputDecoration(
-            //     prefixIcon: Icon(dateIcon),
-            //     labelText: 'Start Date',
-            //     hintText: widget.startDate != null ? "${widget.startDate!.year}-${widget.startDate!.month}-${widget.startDate!.day}"
-            //         : "Please Enter the StartDate",
-            //   ),
-            //   autovalidateMode: AutovalidateMode.always,
-            //   validator: (DateTime? e) =>
-            //   (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-            // ),
-            DateTimeFormField(
-              onDateSelected: (DateTime value){
-                print(value);
+            TextField(
+              controller: dateInput, //editing controller of this TextField
+              decoration: InputDecoration(
+                icon: Icon(Icons.calendar_today), //icon of text field
+                labelText: "Start Date", //label text of field
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                ),
+                hintStyle: TextStyle(
+                  color: Colors.grey[800],
+                ),
+              ),
+              readOnly: true,  //set it true, so that user will not able to edit text
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context, initialDate: DateTime.now(),
+                  firstDate: firstYear,
+                  lastDate: lastYear,
+                );
+
+                if(pickedDate != null){
+                  print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                  String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                  print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                  //you can implement different kind of Date Format here according to your requirement
+
+                  setState(() {
+                    dateInput.text = formattedDate; //set output date to TextField value.
+                  });
+                }else{
+                  print("Date is not selected");
+                }
+              },
+            ),
+            TextField(
+              controller: dateInput, //editing controller of this TextField
+              decoration: InputDecoration(
+                icon: Icon(Icons.calendar_today,), //icon of text field
+                labelText: "End Date", //label text of field
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                ),
+                hintStyle: TextStyle(
+                  color: Colors.grey[800],
+                ),
+              ),
+              readOnly: true,  //set it true, so that user will not able to edit text
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context, initialDate: DateTime.now(),
+                  firstDate: firstYear,
+                  lastDate: lastYear,
+                );
+
+                if(pickedDate != null){
+                  print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                  String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                  print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                  //you can implement different kind of Date Format here according to your requirement
+
+                  setState(() {
+                    dateInput.text = formattedDate; //set output date to TextField value.
+                  });
+                }else{
+                  print("Date is not selected");
+                }
               },
             ),
             Padding(

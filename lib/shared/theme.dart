@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:funds_management/shared/colors.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 
 class AppThemes {
 
@@ -33,6 +32,13 @@ class AppThemes {
       prefixStyle: TextStyle(color: lightModeText),
       suffixIconColor: lightModeIcon,
       suffixStyle: TextStyle(color: lightModeText),
+      iconColor: lightModeIcon,
+      hintStyle: TextStyle(
+        color: lightModeText,
+      ),
+      labelStyle: TextStyle(
+        color: lightModeText,
+      ),
     ),
     popupMenuTheme: PopupMenuThemeData(
       color: lightSearchBar,
@@ -90,6 +96,13 @@ class AppThemes {
       prefixStyle: TextStyle(color: darkModeText),
       suffixIconColor: darkModeIcon,
       suffixStyle: TextStyle(color: darkModeText),
+      iconColor: darkModeIcon,
+      hintStyle: TextStyle(
+      color: darkModeText,
+      ),
+      labelStyle: TextStyle(
+        color: darkModeText,
+      ),
     ),
     popupMenuTheme: PopupMenuThemeData(
       color: darkSearchBar,
