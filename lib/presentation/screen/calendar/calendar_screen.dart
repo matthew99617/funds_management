@@ -68,7 +68,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             context: context,
             constraints: BoxConstraints.loose(Size(
               MediaQuery.of(context).size.width,
-              MediaQuery.of(context).size.height,)
+              MediaQuery.of(context).size.height * 0.9,)
             ),
             isScrollControlled: true,
             shape: RoundedRectangleBorder(
@@ -99,11 +99,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
               appointmentDisplayCount: 4,
             ),
             onTap: calendarTapped,
-            viewNavigationMode: ViewNavigationMode.snap,
             backgroundColor: Colors.grey,
             firstDayOfWeek: 1,
           showDatePickerButton: true,
-          allowViewNavigation: true,
           ),
       )
     );

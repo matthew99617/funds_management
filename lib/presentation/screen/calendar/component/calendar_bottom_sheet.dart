@@ -1,5 +1,6 @@
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:funds_management/shared/colors.dart';
 import 'package:intl/intl.dart';
 
@@ -28,7 +29,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   final GlobalKey _formKey = GlobalKey<FormState>();
   TextEditingController dateInputStartDate = TextEditingController();
   TextEditingController dateInputEndDate = TextEditingController();
-
+  var temp = "";
 
   DateTime firstYear = DateTime.now();
   DateTime lastYear = DateTime.utc(DateTime.now().year.toInt() + 1 , 12, 31);
@@ -182,6 +183,8 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                 return v!.trim().isNotEmpty ? null : "You don't have any change on EndDate!!";
               },
             ),
+            SizedBox(height: 10,),
+            Text(temp.toString()),
             Padding(
               padding: const EdgeInsets.only(top: 28.0),
               child: Row(
@@ -194,7 +197,11 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                       ),
                       onPressed: () {
                         if ((_formKey.currentState as FormState).validate()) {
-
+                          // if (DateTime.parse(dateInputStartDate.text).isBefore(DateTime.parse(dateInputEndDate.text))){
+                          //   setState(() {
+                          //     Text("EndDateTime must before StartDateTime!");
+                          //   });
+                          // }
                         }
                       },
                     ),
