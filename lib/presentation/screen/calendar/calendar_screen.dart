@@ -68,7 +68,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             context: context,
             constraints: BoxConstraints.loose(Size(
               MediaQuery.of(context).size.width,
-              MediaQuery.of(context).size.height * 0.8,)
+              MediaQuery.of(context).size.height,)
             ),
             isScrollControlled: true,
             shape: RoundedRectangleBorder(

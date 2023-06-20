@@ -118,7 +118,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                 return v!.trim().isNotEmpty ? null : "You don't have any change on Descriptions!!";
               },
             ),
-            TextField(
+            TextFormField(
               controller: dateInputStartDate, //editing controller of this TextField
               decoration: InputDecoration(
                 icon: Icon(Icons.calendar_today), //icon of text field
@@ -146,8 +146,11 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                   print("Date is not selected");
                 }
               },
+              validator: (v) {
+                return v!.trim().isNotEmpty ? null : "You don't have any change on StartDate!!";
+              },
             ),
-            TextField(
+            TextFormField(
               controller: dateInputEndDate, //editing controller of this TextField
               decoration: InputDecoration(
                 icon: Icon(Icons.calendar_today,), //icon of text field
@@ -174,6 +177,9 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                 }else{
                   print("Date is not selected");
                 }
+              },
+              validator: (v) {
+                return v!.trim().isNotEmpty ? null : "You don't have any change on EndDate!!";
               },
             ),
             Padding(
