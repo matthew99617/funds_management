@@ -66,6 +66,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
         onPressed: () =>{
           showModalBottomSheet(
             context: context,
+            constraints: BoxConstraints.loose(Size(
+              MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.height * 0.8,)
+            ),
+            isScrollControlled: true,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(45.0),

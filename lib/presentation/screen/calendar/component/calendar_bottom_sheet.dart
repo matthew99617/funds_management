@@ -26,9 +26,11 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   final myControllerDescription = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
-  TextEditingController dateInput = TextEditingController();
+  TextEditingController dateInputStartDate = TextEditingController();
+  TextEditingController dateInputEndDate = TextEditingController();
 
-  DateTime firstYear = DateTime.utc(DateTime.now().year.toInt() - 1 , 12, 31);
+
+  DateTime firstYear = DateTime.now();
   DateTime lastYear = DateTime.utc(DateTime.now().year.toInt() + 1 , 12, 31);
 
   @override
@@ -43,9 +45,15 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
     super.initState();
 
     if (widget.startDate == null){
-      dateInput.text = "";
+      dateInputStartDate.text = "";
     } else {
-      dateInput.text = widget.startDate.toString();
+      dateInputStartDate.text = widget.startDate.toString();
+    }
+
+    if (widget.endDate == null){
+      dateInputEndDate.text = "";
+    } else {
+      dateInputEndDate.text = widget.endDate.toString();
     }
 
     myControllerTitle.addListener((){
@@ -67,14 +75,6 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
       padding: EdgeInsets.all(30),
       child: Form(
         key: _formKey,
@@ -89,18 +89,8 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
             ),
             SizedBox(height: 15.0),
             TextFormField(
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.white,
-              ),
               controller: myControllerTitle,
               decoration: InputDecoration(
-                labelStyle: TextStyle(
-                  color: Colors.white,
-                ),
-                hintStyle: TextStyle(
-                  color: Colors.grey[800],
-                ),
                 labelText: 'Title',
                 hintText: widget.title != null ? '${widget.title}' : 'Please Input Descriptions',
               ),
@@ -112,10 +102,6 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
             TextFormField(
               autofocus: true,
               controller: myControllerDescription,
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.white,
-              ),
               decoration: InputDecoration(
                 labelStyle: TextStyle(
                     color: Colors.white
@@ -133,21 +119,16 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
               },
             ),
             TextField(
-              controller: dateInput, //editing controller of this TextField
+              controller: dateInputStartDate, //editing controller of this TextField
               decoration: InputDecoration(
                 icon: Icon(Icons.calendar_today), //icon of text field
                 labelText: "Start Date", //label text of field
-                labelStyle: TextStyle(
-                  color: Colors.white,
-                ),
-                hintStyle: TextStyle(
-                  color: Colors.grey[800],
-                ),
               ),
               readOnly: true,  //set it true, so that user will not able to edit text
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
-                  context: context, initialDate: DateTime.now(),
+                  context: context,
+                  initialDate: DateTime.now(),
                   firstDate: firstYear,
                   lastDate: lastYear,
                 );
@@ -159,7 +140,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                   //you can implement different kind of Date Format here according to your requirement
 
                   setState(() {
-                    dateInput.text = formattedDate; //set output date to TextField value.
+                    dateInputStartDate.text = formattedDate; //set output date to TextField value.
                   });
                 }else{
                   print("Date is not selected");
@@ -167,22 +148,17 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
               },
             ),
             TextField(
-              controller: dateInput, //editing controller of this TextField
+              controller: dateInputEndDate, //editing controller of this TextField
               decoration: InputDecoration(
                 icon: Icon(Icons.calendar_today,), //icon of text field
                 labelText: "End Date", //label text of field
-                labelStyle: TextStyle(
-                  color: Colors.white,
-                ),
-                hintStyle: TextStyle(
-                  color: Colors.grey[800],
-                ),
               ),
               readOnly: true,  //set it true, so that user will not able to edit text
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
-                  context: context, initialDate: DateTime.now(),
-                  firstDate: firstYear,
+                  context: context,
+                  initialDate: DateTime.parse(dateInputStartDate.text),
+                  firstDate: DateTime.parse(dateInputStartDate.text),
                   lastDate: lastYear,
                 );
 
@@ -193,7 +169,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                   //you can implement different kind of Date Format here according to your requirement
 
                   setState(() {
-                    dateInput.text = formattedDate; //set output date to TextField value.
+                    dateInputEndDate.text = formattedDate; //set output date to TextField value.
                   });
                 }else{
                   print("Date is not selected");
@@ -219,7 +195,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

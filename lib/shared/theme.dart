@@ -23,6 +23,9 @@ class AppThemes {
       headline4: TextStyle(color: lightModeText),
       headline5: TextStyle(color: lightModeText),
       headline6: TextStyle(color: lightModeText),
+      subtitle1: TextStyle(color: lightModeText),
+      subtitle2: TextStyle(color: lightModeText),
+      button: TextStyle(color: lightModeText),
     ),
     iconTheme: IconThemeData(color: lightModeIcon),
     dividerTheme: DividerThemeData(color: lightModeDivider),
@@ -33,12 +36,18 @@ class AppThemes {
       suffixIconColor: lightModeIcon,
       suffixStyle: TextStyle(color: lightModeText),
       iconColor: lightModeIcon,
-      hintStyle: TextStyle(
-        color: lightModeText,
-      ),
       labelStyle: TextStyle(
         color: lightModeText,
       ),
+      hintStyle: TextStyle(
+        color: Colors.grey[800],
+      ),
+      counterStyle: TextStyle(
+        color: lightModeText,
+      ),
+        floatingLabelStyle: TextStyle(
+          color: lightModeText,
+        )
     ),
     popupMenuTheme: PopupMenuThemeData(
       color: lightSearchBar,
@@ -87,6 +96,9 @@ class AppThemes {
       headline4: TextStyle(color: darkModeText),
       headline5: TextStyle(color: darkModeText),
       headline6: TextStyle(color: darkModeText),
+      subtitle1: TextStyle(color: darkModeText),
+      subtitle2: TextStyle(color: darkModeText),
+      button: TextStyle(color: darkModeText),
     ),
     iconTheme: IconThemeData(color: darkModeIcon),
     dividerTheme: DividerThemeData(color: darkModeDivider),
@@ -97,11 +109,17 @@ class AppThemes {
       suffixIconColor: darkModeIcon,
       suffixStyle: TextStyle(color: darkModeText),
       iconColor: darkModeIcon,
-      hintStyle: TextStyle(
-      color: darkModeText,
-      ),
       labelStyle: TextStyle(
+          color: darkModeText
+      ),
+      hintStyle: TextStyle(
+        color: Colors.grey[800],
+      ),
+      counterStyle: TextStyle(
         color: darkModeText,
+      ),
+      floatingLabelStyle: TextStyle(
+        color:darkModeText,
       ),
     ),
     popupMenuTheme: PopupMenuThemeData(
