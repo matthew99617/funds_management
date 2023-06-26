@@ -64,12 +64,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
       body: content(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () =>{
-          showModalBottomSheet(
+          showModalBottomSheet<dynamic>(
+            useRootNavigator: true,
             context: context,
-            constraints: BoxConstraints.loose(Size(
-              MediaQuery.of(context).size.width,
-              MediaQuery.of(context).size.height * 0.9,)
-            ),
             isScrollControlled: true,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
