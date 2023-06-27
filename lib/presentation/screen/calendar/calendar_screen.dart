@@ -39,7 +39,24 @@ class _CalendarScreenState extends State<CalendarScreen> {
     if (calendarTapDetails.targetElement == CalendarElement.appointment ||
         calendarTapDetails.targetElement == CalendarElement.agenda) {
       Notes notes = calendarTapDetails.appointments![0];
-      print('123: ${notes.title}');
+      showModalBottomSheet<dynamic>(
+          useRootNavigator: true,
+          context: context,
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(45.0),
+              )
+          ),
+          builder: (context) {
+            return CalendarBottomSheet(
+              title: notes.title,
+              notes: notes.notes,
+              startDate: notes.startDate,
+              endDate: notes.endDate,
+            );
+          }
+      );
     }
   }
 

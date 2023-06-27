@@ -1,12 +1,7 @@
 import 'dart:js_interop';
 
-import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:funds_management/shared/colors.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../shared/icons_data.dart';
 
 class CalendarBottomSheet extends StatefulWidget {
 
@@ -50,13 +45,13 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
     if (widget.startDate == null){
       dateInputStartDate.text = "";
     } else {
-      dateInputStartDate.text = widget.startDate.toString();
+      dateInputStartDate.text = DateFormat('yyyy-MM-dd').format(widget.startDate!);
     }
 
     if (widget.endDate == null){
       dateInputEndDate.text = "";
     } else {
-      dateInputEndDate.text = widget.endDate.toString();
+      dateInputEndDate.text = DateFormat('yyyy-MM-dd').format(widget.endDate!);
     }
 
     myControllerTitle.addListener((){
@@ -85,13 +80,9 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
             key: _formKey,
             child: Column(
               children: [
-                Text(
-                  'Add Event',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25.0
-                  ),
-                ),
+                widget.notes == null
+                    ? Text('Add Event', style: TextStyle(fontSize: 25.0),)
+                    : Text('Edit Event', style: TextStyle( fontSize: 25.0),),
                 SizedBox(height: 15.0),
                 TextFormField(
                   controller: myControllerTitle,
