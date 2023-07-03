@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:funds_management/presentation/router/router.gr.dart';
@@ -8,6 +9,17 @@ import 'config/environment.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+        apiKey: "AIzaSyBUegZyaOr-2A3Lh9jv1bpXmJXuTmqVF3I",
+        authDomain: "fundsmanagement-d7680.firebaseapp.com",
+        projectId: "fundsmanagement-d7680",
+        storageBucket: "fundsmanagement-d7680.appspot.com",
+        messagingSenderId: "442474534389",
+        appId: "1:442474534389:web:f53a2fd59951006984fcbc",
+        measurementId: "G-ZRNMV4BXQQ",
+    )
+  );
   await ConfigReader.initializeApp(Environment.dev);
   final _appRouter = AppRouter();
   initializeDateFormatting().then((_) => runApp(

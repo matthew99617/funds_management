@@ -32,6 +32,25 @@
   <title>funds_management</title>
   <link rel="manifest" href="manifest.json">
 
+  <script type="module">
+    import { initializeApp } from "firebase/app";
+    import { getAnalytics } from "firebase/analytics";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBUegZyaOr-2A3Lh9jv1bpXmJXuTmqVF3I",
+      authDomain: "fundsmanagement-d7680.firebaseapp.com",
+      projectId: "fundsmanagement-d7680",
+      storageBucket: "fundsmanagement-d7680.appspot.com",
+      messagingSenderId: "442474534389",
+      appId: "1:442474534389:web:f53a2fd59951006984fcbc",
+      measurementId: "G-ZRNMV4BXQQ"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
