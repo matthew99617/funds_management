@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:funds_management/firebase/FireStoreDataBase.dart';
 import 'package:funds_management/presentation/screen/home/component/to_do_list.dart';
 import 'package:funds_management/shared/share_preference_helper.dart';
 
@@ -85,31 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    retrieveData();
     super.initState();
-  }
-
-  retrieveData() async* {
-    var data = await FirebaseFirestore.instance.collection("plans").get();
-    mapData(data);
-  }
-
-  mapData(QuerySnapshot<Map<String, dynamic>> data){
-    var toDoList = data.docs.map((notes) =>
-        Notes(
-          id: notes.id,
-          title: notes['title'],
-          notes: notes['notes'],
-          startDate: notes['startDate'],
-          endDate: notes['endDate'],
-        )
-    ).toList();
-
-    setState(() {
-      final String encodeData = Notes.encode(toDoList);
-      SharePreferenceHelper.saveListData(encodeData);
-      savedList = toDoList;
-    });
   }
 
   static List<Notes> sortByDay(List<Notes> dates) {
@@ -136,42 +113,65 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: FutureBuilder(
+          future: FireStoreDataBase().getData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done){
+              var toDoList = snapshot.data.docs.map((notes) =>
+                  Notes(
+                    id: notes.id,
+                    title: notes['title'],
+                    notes: notes['notes'],
+                    startDate: notes['startDate'],
+                    endDate: notes['endDate'],
+                  )
+              ).toList();
+              final String encodeData = Notes.encode(toDoList);
+              SharePreferenceHelper.saveListData(encodeData);
+              print("snapshot.data");
+              return SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        "Forward Plans",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              "Forward Plans",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(scanIcon),
+                              iconSize: 30,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onPressed: () {},
+                            ),
+                          ],
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(scanIcon),
-                        iconSize: 30,
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onPressed: () {},
+                      Divider(
+                        thickness: 1,
                       ),
+                      SizedBox(height: 2),
+                      ListToDo(toDoList: sortByDay(filterDataByCurrentMonth(savedList))),
                     ],
                   ),
                 ),
-                Divider(
-                  thickness: 1,
-                ),
-                SizedBox(height: 2),
-                ListToDo(toDoList: sortByDay(filterDataByCurrentMonth(savedList))),
-              ],
-            ),
-          ),
+              );
+            }
+            if (snapshot.hasError){
+              print("Something went wrong");
+            }
+            return const Center(child: CircularProgressIndicator());
+          }
         )
     );
   }

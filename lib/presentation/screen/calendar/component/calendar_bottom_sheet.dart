@@ -1,8 +1,5 @@
-import 'dart:js_interop';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:funds_management/model/notes.dart';
 import 'package:intl/intl.dart';
 
 class CalendarBottomSheet extends StatefulWidget {
@@ -157,7 +154,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                   ),
                   readOnly: true,  //set it true, so that user will not able to edit text
                   onTap: () async {
-                    if (!dateInputStartDate.isNull){
+                    if (dateInputStartDate != null){
                       DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
