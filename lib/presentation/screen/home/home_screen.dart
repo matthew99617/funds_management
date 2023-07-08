@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:funds_management/presentation/screen/home/component/to_do_list.dart';
 import 'package:funds_management/shared/share_preference_helper.dart';
@@ -18,64 +19,65 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  CollectionReference notes = FirebaseFirestore.instance.collection("plans");
   static List<Notes> savedList = [];
 
-  static List<Notes> toDoList = [
-    Notes(
-        id: 1,
-        title: 'What to do 1',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 02, 24),
-        endDate: DateTime.utc(2023, 02, 24)),
-    Notes(
-        id: 2,
-        title: 'What to do 6',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 02, 01),
-        endDate: DateTime.utc(2023, 02, 05)),
-    Notes(
-        id: 3,
-        title: 'What to do 5',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 02, 27),
-        endDate: DateTime.utc(2023, 02, 28)),
-    Notes(
-        id: 4,
-        title: 'What to do 3',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 02, 01),
-        endDate: DateTime.utc(2023, 02, 04)),
-    Notes(
-        id: 5,
-        title: 'What to do 4',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 02, 04),
-        endDate: DateTime.utc(2023, 02, 24)),
-    Notes(
-        id: 6,
-        title: 'What to do 7',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 03, 04),
-        endDate: DateTime.utc(2023, 03, 18)),
-    Notes(
-        id: 7,
-        title: 'What to do 8',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 05, 04),
-        endDate: DateTime.utc(2023, 05, 18)),
-    Notes(
-        id: 8,
-        title: 'What to do 9',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 09, 04),
-        endDate: DateTime.utc(2023, 09, 18)),
-    Notes(
-        id: 9,
-        title: 'What to do 10',
-        notes: 'Testing 123',
-        startDate: DateTime.utc(2023, 02, 06),
-        endDate: DateTime.utc(2023, 02, 18)),
-  ];
+  // static List<Notes> toDoList = [
+  //   Notes(
+  //       id: 1,
+  //       title: 'What to do 1',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 02, 24),
+  //       endDate: DateTime.utc(2023, 02, 24)),
+  //   Notes(
+  //       id: 2,
+  //       title: 'What to do 6',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 02, 01),
+  //       endDate: DateTime.utc(2023, 02, 05)),
+  //   Notes(
+  //       id: 3,
+  //       title: 'What to do 5',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 02, 27),
+  //       endDate: DateTime.utc(2023, 02, 28)),
+  //   Notes(
+  //       id: 4,
+  //       title: 'What to do 3',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 02, 01),
+  //       endDate: DateTime.utc(2023, 02, 04)),
+  //   Notes(
+  //       id: 5,
+  //       title: 'What to do 4',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 02, 04),
+  //       endDate: DateTime.utc(2023, 02, 24)),
+  //   Notes(
+  //       id: 6,
+  //       title: 'What to do 7',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 03, 04),
+  //       endDate: DateTime.utc(2023, 03, 18)),
+  //   Notes(
+  //       id: 7,
+  //       title: 'What to do 8',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 05, 04),
+  //       endDate: DateTime.utc(2023, 05, 18)),
+  //   Notes(
+  //       id: 8,
+  //       title: 'What to do 9',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 09, 04),
+  //       endDate: DateTime.utc(2023, 09, 18)),
+  //   Notes(
+  //       id: 9,
+  //       title: 'What to do 10',
+  //       notes: 'Testing 123',
+  //       startDate: DateTime.utc(2023, 02, 06),
+  //       endDate: DateTime.utc(2023, 02, 18)),
+  // ];
 
   // List<String> jsonList = toDoList.map((note) => note.toEncodeString()).toList();
 
@@ -83,22 +85,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    retrieveData();
     super.initState();
-    _saveList();
-    _loadList();
   }
-  _saveList() {
+
+  retrieveData() async* {
+    var data = await FirebaseFirestore.instance.collection("plans").get();
+    mapData(data);
+  }
+
+  mapData(QuerySnapshot<Map<String, dynamic>> data){
+    var toDoList = data.docs.map((notes) =>
+        Notes(
+          id: notes.id,
+          title: notes['title'],
+          notes: notes['notes'],
+          startDate: notes['startDate'],
+          endDate: notes['endDate'],
+        )
+    ).toList();
+
     setState(() {
       final String encodeData = Notes.encode(toDoList);
       SharePreferenceHelper.saveListData(encodeData);
-    });
-  }
-
-  Future _loadList() async {
-    final dataStr = await SharePreferenceHelper.getListData();
-    setState(() {
-      savedList = Notes.decode(dataStr);
-      print("dataStr: $dataStr");
+      savedList = toDoList;
     });
   }
 
@@ -115,8 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   static List<Notes> filterDataByCurrentMonth(List<Notes> dataList) {
-    // final now = DateTime.now();
-    final now = DateTime.utc(2023, 02, 01);
+    final now = DateTime.now();
     return dataList
         .where((data) =>
             data.startDate.month == now.month &&

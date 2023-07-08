@@ -1,6 +1,8 @@
 import 'dart:js_interop';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:funds_management/model/notes.dart';
 import 'package:intl/intl.dart';
 
 class CalendarBottomSheet extends StatefulWidget {
@@ -20,12 +22,13 @@ class CalendarBottomSheet extends StatefulWidget {
 
 class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
 
+  final dateInputStartDate = TextEditingController();
+  final dateInputEndDate = TextEditingController();
   final myControllerTitle = TextEditingController();
   final myControllerDescription = TextEditingController();
+  final db = FirebaseFirestore.instance;
 
   final GlobalKey _formKey = GlobalKey<FormState>();
-  TextEditingController dateInputStartDate = TextEditingController();
-  TextEditingController dateInputEndDate = TextEditingController();
   var temp = "";
 
   DateTime firstYear = DateTime.now();
@@ -203,11 +206,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                           ),
                           onPressed: () {
                             if ((_formKey.currentState as FormState).validate()) {
-                              // if (DateTime.parse(dateInputStartDate.text).isBefore(DateTime.parse(dateInputEndDate.text))){
-                              //   setState(() {
-                              //     Text("EndDateTime must before StartDateTime!");
-                              //   });
-                              // }
+                              Navigator.pop(context);
                             }
                           },
                         ),

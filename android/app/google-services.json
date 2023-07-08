@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "442474534389",
+    "project_id": "fundsmanagement-d7680",
+    "storage_bucket": "fundsmanagement-d7680.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442474534389:android:7023e58d5034fb8384fcbc",
+        "android_client_info": {
+          "package_name": "com.example.funds_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442474534389-6jhdf4g9795h9hln40a7h1h8bem3ge9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDba3Hiyd-b2AxqxvVmacTkoiPEq7IUk4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442474534389-6jhdf4g9795h9hln40a7h1h8bem3ge9m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "442474534389-uurmkjqqb62l0f3niks0iahmih4ecb0q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fundsManagement"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

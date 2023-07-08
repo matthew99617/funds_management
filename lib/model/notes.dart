@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Notes{
-  final int id;
+  final String id;
   final String title;
   final String notes;
   final DateTime endDate;
@@ -47,5 +49,16 @@ class Notes{
   sortByDate (List<Notes> notes) {
     notes.sort((a, b) =>
         a.startDate.day.compareTo(b.startDate.day));
+  }
+
+  factory Notes.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
+    final data = document.data();
+    return Notes(
+      id: document.id,
+      title: data?["title"],
+      notes: data?["notes"],
+      startDate: data?["startDate"],
+      endDate: data?["endDate"],
+    );
   }
 }
