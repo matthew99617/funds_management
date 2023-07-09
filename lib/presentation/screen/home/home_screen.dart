@@ -1,8 +1,10 @@
+import 'dart:collection';
 import 'dart:core';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:funds_management/firebase/FireStoreDataBase.dart';
+import 'package:funds_management/model/retrieve_data_with_id_notes.dart';
 import 'package:funds_management/presentation/screen/home/component/to_do_list.dart';
 import 'package:funds_management/shared/share_preference_helper.dart';
 
@@ -117,18 +119,21 @@ class _HomeScreenState extends State<HomeScreen> {
           future: FireStoreDataBase().getData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done){
-              var toDoList = snapshot.data.docs.map((notes) =>
-                  Notes(
-                    id: notes.id,
-                    title: notes['title'],
-                    notes: notes['notes'],
-                    startDate: notes['startDate'],
-                    endDate: notes['endDate'],
-                  )
-              ).toList();
-              final String encodeData = Notes.encode(toDoList);
-              SharePreferenceHelper.saveListData(encodeData);
-              print("snapshot.data");
+              var dataList = (snapshot.data as List)
+                  .map((item) => item as RetrieveDataWithID).toList();
+              for (var result in dataList) {
+                var toDoList = Notes(
+                  title: result.notes.title,
+                  notes: result.notes.notes,
+                  startDate: result.notes.startDate,
+                  endDate: result.notes.endDate,
+                );
+                savedList.add(toDoList);
+                print(savedList.length);
+
+              }
+              // final String encodeData = Notes.encode(toDoList);
+              // SharePreferenceHelper.saveListData(encodeData);
               return SafeArea(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -167,10 +172,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }
-            if (snapshot.hasError){
-              print("Something went wrong");
+            if (snapshot.connectionState == ConnectionState.waiting){
+              return const Center(child: CircularProgressIndicator());
             }
-            return const Center(child: CircularProgressIndicator());
+            return Text("Something went wrong");
           }
         )
     );
