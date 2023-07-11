@@ -64,8 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   startDate: result.notes.startDate,
                   endDate: result.notes.endDate,
                 );
-                savedList.add(toDoList);
 
+                /**
+                 *  Remember You have Filtering the Data, Just CURRENT MONTH only
+                 */
+
+                savedList.add(toDoList);
               }
               final String encodeData = Notes.encode(savedList);
               SharePreferenceHelper.saveListData(encodeData);
