@@ -1,15 +1,12 @@
-import 'dart:collection';
 import 'dart:core';
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:funds_management/firebase/FireStoreDataBase.dart';
 import 'package:funds_management/model/retrieve_data_with_id_notes.dart';
 import 'package:funds_management/presentation/screen/home/component/to_do_list.dart';
-import 'package:funds_management/shared/share_preference_helper.dart';
 
 import '../../../model/notes.dart';
 import '../../../shared/icons_data.dart';
+import '../../../shared/share_preference_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -22,69 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  CollectionReference notes = FirebaseFirestore.instance.collection("plans");
   static List<Notes> savedList = [];
-
-  // static List<Notes> toDoList = [
-  //   Notes(
-  //       id: 1,
-  //       title: 'What to do 1',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 02, 24),
-  //       endDate: DateTime.utc(2023, 02, 24)),
-  //   Notes(
-  //       id: 2,
-  //       title: 'What to do 6',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 02, 01),
-  //       endDate: DateTime.utc(2023, 02, 05)),
-  //   Notes(
-  //       id: 3,
-  //       title: 'What to do 5',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 02, 27),
-  //       endDate: DateTime.utc(2023, 02, 28)),
-  //   Notes(
-  //       id: 4,
-  //       title: 'What to do 3',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 02, 01),
-  //       endDate: DateTime.utc(2023, 02, 04)),
-  //   Notes(
-  //       id: 5,
-  //       title: 'What to do 4',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 02, 04),
-  //       endDate: DateTime.utc(2023, 02, 24)),
-  //   Notes(
-  //       id: 6,
-  //       title: 'What to do 7',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 03, 04),
-  //       endDate: DateTime.utc(2023, 03, 18)),
-  //   Notes(
-  //       id: 7,
-  //       title: 'What to do 8',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 05, 04),
-  //       endDate: DateTime.utc(2023, 05, 18)),
-  //   Notes(
-  //       id: 8,
-  //       title: 'What to do 9',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 09, 04),
-  //       endDate: DateTime.utc(2023, 09, 18)),
-  //   Notes(
-  //       id: 9,
-  //       title: 'What to do 10',
-  //       notes: 'Testing 123',
-  //       startDate: DateTime.utc(2023, 02, 06),
-  //       endDate: DateTime.utc(2023, 02, 18)),
-  // ];
-
-  // List<String> jsonList = toDoList.map((note) => note.toEncodeString()).toList();
-
-  // https://medium.com/@hasimyerlikaya/flutter-custom-datetime-serialization-with-jsonconverter-5f57f93d537
 
   @override
   void initState() {
@@ -119,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
           future: FireStoreDataBase().getData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done){
+              savedList.clear();
               var dataList = (snapshot.data as List)
                   .map((item) => item as RetrieveDataWithID).toList();
               for (var result in dataList) {
@@ -129,11 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   endDate: result.notes.endDate,
                 );
                 savedList.add(toDoList);
-                print(savedList.length);
 
               }
-              // final String encodeData = Notes.encode(toDoList);
-              // SharePreferenceHelper.saveListData(encodeData);
+              final String encodeData = Notes.encode(savedList);
+              SharePreferenceHelper.saveListData(encodeData);
+
               return SafeArea(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),

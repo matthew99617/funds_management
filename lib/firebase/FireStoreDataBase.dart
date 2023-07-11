@@ -15,24 +15,23 @@ class FireStoreDataBase {
 
       // to get data from all documents sequentially
       await collectionRef.get().then((querySnapshot) {
-        for (var result in querySnapshot.docs) {
-          Timestamp tStartDate = result.get('startDate');
-          Timestamp tEndDate = result.get('endDate');
+        for (var i = 0; i < querySnapshot.docs.length; i++) {
+
+          Timestamp tStartDate = querySnapshot.docs[i].get('startDate');
+          Timestamp tEndDate = querySnapshot.docs[i].get('endDate');
 
           var data = RetrieveDataWithID(
-            id: result.id.toString(),
+            id: querySnapshot.docs[i].id.toString(),
             notes: Notes(
-                title: result.get('title'),
-                notes: result.get('notes'),
+                title: querySnapshot.docs[i].get('title'),
+                notes: querySnapshot.docs[i].get('notes'),
                 startDate: DateTime.parse(tStartDate.toDate().toString()),
                 endDate: DateTime.parse(tEndDate.toDate().toString()),
             )
           );
-
           toDoList.add(data);
         }
       });
-
       return toDoList;
     } catch (e) {
       debugPrint("Error - $e");
