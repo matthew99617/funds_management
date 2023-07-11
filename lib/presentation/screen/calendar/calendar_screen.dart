@@ -38,7 +38,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void calendarTapped(CalendarTapDetails calendarTapDetails) {
     if (calendarTapDetails.targetElement == CalendarElement.appointment ||
         calendarTapDetails.targetElement == CalendarElement.agenda) {
-      Notes notes = calendarTapDetails.appointments![0];
+      Notes notes = calendarTapDetails.appointments?[0];
       showModalBottomSheet<dynamic>(
           useRootNavigator: true,
           context: context,

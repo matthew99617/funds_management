@@ -24,6 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    loadData();
+  }
+
+  Future loadData() async{
+    final dataStr = await SharePreferenceHelper.getListData();
+    setState(() {
+      savedList = Notes.decode(dataStr);
+    });
   }
 
   static List<Notes> sortByDay(List<Notes> dates) {
@@ -50,73 +58,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder(
-          future: FireStoreDataBase().getData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done){
-              savedList.clear();
-              var dataList = (snapshot.data as List)
-                  .map((item) => item as RetrieveDataWithID).toList();
-              for (var result in dataList) {
-                var toDoList = Notes(
-                  title: result.notes.title,
-                  notes: result.notes.notes,
-                  startDate: result.notes.startDate,
-                  endDate: result.notes.endDate,
-                );
-
-                /**
-                 *  Remember You have Filtering the Data, Just CURRENT MONTH only
-                 */
-
-                savedList.add(toDoList);
-              }
-              final String encodeData = Notes.encode(savedList);
-              SharePreferenceHelper.saveListData(encodeData);
-
-              return SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Forward Plans",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30,
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(scanIcon),
-                              iconSize: 30,
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onPressed: () {},
-                            ),
-                          ],
+                      Text(
+                        "Forward Plans",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
                         ),
                       ),
-                      Divider(
-                        thickness: 1,
+                      IconButton(
+                        icon: Icon(scanIcon),
+                        iconSize: 30,
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {},
                       ),
-                      SizedBox(height: 2),
-                      ListToDo(toDoList: sortByDay(filterDataByCurrentMonth(savedList))),
                     ],
                   ),
                 ),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting){
-              return const Center(child: CircularProgressIndicator());
-            }
-            return Text("Something went wrong");
-          }
+                Divider(
+                  thickness: 1,
+                ),
+                SizedBox(height: 2),
+                ListToDo(toDoList: sortByDay(filterDataByCurrentMonth(savedList))),
+              ],
+            ),
+          ),
         )
     );
   }

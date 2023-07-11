@@ -23,10 +23,10 @@ class FireStoreDataBase {
           var data = RetrieveDataWithID(
             id: querySnapshot.docs[i].id.toString(),
             notes: Notes(
-                title: querySnapshot.docs[i].get('title'),
-                notes: querySnapshot.docs[i].get('notes'),
-                startDate: DateTime.parse(tStartDate.toDate().toString()),
-                endDate: DateTime.parse(tEndDate.toDate().toString()),
+              title: querySnapshot.docs[i].get('title'),
+              notes: querySnapshot.docs[i].get('notes'),
+              startDate: DateTime.parse(tStartDate.toDate().toString()),
+              endDate: DateTime.parse(tEndDate.toDate().toString()),
             )
           );
           toDoList.add(data);

@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Notes{
+  final String? id;
   final String title;
   final String notes;
   final DateTime endDate;
   final DateTime startDate;
 
   Notes({
+    this.id,
     required this.title,
     required this.notes,
     required this.startDate,
@@ -17,6 +19,7 @@ class Notes{
 
   factory Notes.fromMap(Map<String, dynamic> json){
     return Notes(
+      id: json['id'],
       title: json['title'],
       notes: json['notes'],
       startDate: DateTime.parse(json['startDate']),
@@ -25,6 +28,7 @@ class Notes{
   }
 
   static Map<String, dynamic> toJson(Notes note) => {
+    'id': note.id,
     'title': note.title,
     'notes': note.notes,
     'startDate': note.startDate.toIso8601String(),
@@ -45,15 +49,5 @@ class Notes{
   sortByDate (List<Notes> notes) {
     notes.sort((a, b) =>
         a.startDate.day.compareTo(b.startDate.day));
-  }
-
-  factory Notes.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
-    final data = document.data();
-    return Notes(
-      title: data?["title"],
-      notes: data?["notes"],
-      startDate: data?["startDate"],
-      endDate: data?["endDate"],
-    );
   }
 }
