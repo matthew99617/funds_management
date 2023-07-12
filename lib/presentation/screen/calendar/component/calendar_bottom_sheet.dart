@@ -1,17 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:funds_management/firebase/FireStoreDataBase.dart';
+import 'package:funds_management/shared/share_preference_helper.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../model/notes.dart';
+import '../../../../model/retrieve_data_with_id_notes.dart';
 
 class CalendarBottomSheet extends StatefulWidget {
 
   final ScrollController scrollController = ScrollController();
 
+  final String? id;
   final String? title;
   final String? notes;
   final DateTime? startDate;
   final DateTime? endDate;
 
-  CalendarBottomSheet({Key? key, this.title, this.notes, this.startDate, this.endDate}) : super(key: key);
+  CalendarBottomSheet({Key? key, this.id, this.title, this.notes, this.startDate, this.endDate}) : super(key: key);
 
   @override
   State<CalendarBottomSheet> createState() => _CalendarBottomSheetState();
@@ -201,9 +208,32 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                             padding: const EdgeInsets.all(16.0),
                             child: Text("Submit"),
                           ),
-                          onPressed: () {
+                          onPressed: () async{
                             if ((_formKey.currentState as FormState).validate()) {
-                              Navigator.pop(context);
+                              if (widget.id == null){
+                                Map<String, dynamic> data ={
+                                  'title': myControllerTitle.text,
+                                  'notes': myControllerDescription.text,
+                                  'startDate': DateTime.parse(dateInputStartDate.text),
+                                  'endDate': DateTime.parse(dateInputEndDate.text),
+                                };
+
+                                await FirebaseFirestore.instance.collection('plans').add(data).then(
+                                        (value) => {
+                                          Navigator.pop(context, true),
+                                          Fluttertoast.showToast(
+                                            msg: "Insert Successfully",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 2,
+                                          ),
+                                          fetchDataAgain()
+
+                                        }
+                                );
+                              }
+
+
                             }
                           },
                         ),
@@ -217,7 +247,36 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
         ),
       ],
     );
+  }
 
+  Future fetchDataAgain() async{
 
+    var fireStoreDatabase = FireStoreDataBase();
+    var snapshot = await fireStoreDatabase.getData();
+    List<Notes> savedList = [];
+
+    savedList.clear();
+    var dataList = (snapshot as List)
+        .map((item) => item as RetrieveDataWithID).toList();
+    for (var result in dataList) {
+      var toDoList = Notes(
+        id: result.id,
+        title: result.notes.title,
+        notes: result.notes.notes,
+        startDate: result.notes.startDate,
+        endDate: result.notes.endDate,
+      );
+
+      /**
+       *  Remember You have Filtering the Data, Just CURRENT MONTH only
+       */
+
+      savedList.add(toDoList);
+    }
+    final String encodeData = Notes.encode(savedList);
+    SharePreferenceHelper.saveListData(encodeData);
+
+    // final String encodeData = Notes.encode(savedList as List<Notes>);
+    // return encodeData;
   }
 }

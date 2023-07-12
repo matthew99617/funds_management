@@ -16,9 +16,8 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  final ScrollController _scrollController = ScrollController();
   static List<Notes> savedList = [];
-  Map<DateTime, List<Notes>>? _selectedEvent = null;
+  bool isOpen = false;
 
   DateTime today = DateTime.now();
   DateTime firstYear = DateTime.utc(DateTime.now().year.toInt() - 5 , 12, 31);
@@ -26,8 +25,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   void initState() {
-    super.initState();
     loadData();
+    super.initState();
   }
 
   @override
@@ -35,11 +34,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
     super.dispose();
   }
 
-  void calendarTapped(CalendarTapDetails calendarTapDetails) {
+  void calendarTapped(CalendarTapDetails calendarTapDetails) async {
     if (calendarTapDetails.targetElement == CalendarElement.appointment ||
         calendarTapDetails.targetElement == CalendarElement.agenda) {
       Notes notes = calendarTapDetails.appointments?[0];
-      showModalBottomSheet<dynamic>(
+      bool b = await showModalBottomSheet<dynamic>(
           useRootNavigator: true,
           context: context,
           isScrollControlled: true,
@@ -50,13 +49,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
           builder: (context) {
             return CalendarBottomSheet(
+              id: notes.id,
               title: notes.title,
               notes: notes.notes,
               startDate: notes.startDate,
               endDate: notes.endDate,
             );
-          }
+          },
       );
+      if (b == true){
+        loadData();
+      }
     }
   }
 
@@ -80,8 +83,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return Scaffold(
       body: content(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () =>{
-          showModalBottomSheet<dynamic>(
+        onPressed: () => {
+          showModalBottomSheet<bool>(
             useRootNavigator: true,
             context: context,
             isScrollControlled: true,
