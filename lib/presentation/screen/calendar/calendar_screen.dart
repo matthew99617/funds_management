@@ -23,22 +23,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime firstYear = DateTime.utc(DateTime.now().year.toInt() - 5 , 12, 31);
   DateTime lastYear = DateTime.utc(DateTime.now().year.toInt() + 5 , 12, 31);
 
-  @override
-  void initState() {
-    loadData();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void calendarTapped(CalendarTapDetails calendarTapDetails) async {
+  void calendarTapped(CalendarTapDetails calendarTapDetails) {
     if (calendarTapDetails.targetElement == CalendarElement.appointment ||
         calendarTapDetails.targetElement == CalendarElement.agenda) {
       Notes notes = calendarTapDetails.appointments?[0];
-      bool b = await showModalBottomSheet<dynamic>(
+      showModalBottomSheet<void>(
           useRootNavigator: true,
           context: context,
           isScrollControlled: true,
@@ -56,11 +45,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
               endDate: notes.endDate,
             );
           },
-      );
-      if (b == true){
-        loadData();
-      }
+      ).whenComplete(() => loadData());
     }
+  }
+
+  @override
+  void initState() {
+    loadData();
+    super.initState();
   }
 
   Future loadData() async{
@@ -70,21 +62,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     });
   }
 
-  List<DateTime> getDaysInBetween(DateTime startDate, DateTime endDate) {
-    List<DateTime> days = [];
-    for (int i = 0; i <= endDate.difference(startDate).inDays; i++) {
-      days.add(startDate.add(Duration(days: i)));
-    }
-    return days;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: content(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => {
-          showModalBottomSheet<bool>(
+          showModalBottomSheet<void>(
             useRootNavigator: true,
             context: context,
             isScrollControlled: true,
@@ -96,7 +80,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             builder: (context) {
               return CalendarBottomSheet();
             }
-          )
+          ).whenComplete(() => loadData(),),
         },
         label: Text("Add Event"),
         icon: Icon(Icons.add),
@@ -109,15 +93,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SfCalendar(
-            view: CalendarView.month,
-            dataSource: NotesDataSource(savedList),
-            monthViewSettings: const MonthViewSettings(
-              showAgenda: true,
-              appointmentDisplayCount: 4,
-            ),
-            onTap: calendarTapped,
-            backgroundColor: Colors.grey,
-            firstDayOfWeek: 1,
+          view: CalendarView.month,
+          dataSource: NotesDataSource(savedList),
+          monthViewSettings: const MonthViewSettings(
+            showAgenda: true,
+            appointmentDisplayCount: 4,
+          ),
+          onTap: calendarTapped,
+          backgroundColor: Colors.grey,
+          firstDayOfWeek: 1,
           showDatePickerButton: true,
           ),
       )

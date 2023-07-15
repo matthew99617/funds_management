@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -202,42 +204,82 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                   padding: const EdgeInsets.only(top: 28.0),
                   child: Row(
                     children: <Widget>[
-                      Expanded(
-                        child: ElevatedButton(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text("Submit"),
-                          ),
-                          onPressed: () async{
-                            if ((_formKey.currentState as FormState).validate()) {
-                              if (widget.id == null){
-                                Map<String, dynamic> data ={
-                                  'title': myControllerTitle.text,
-                                  'notes': myControllerDescription.text,
-                                  'startDate': DateTime.parse(dateInputStartDate.text),
-                                  'endDate': DateTime.parse(dateInputEndDate.text),
-                                };
-
-                                await FirebaseFirestore.instance.collection('plans').add(data).then(
-                                        (value) => {
-                                          Navigator.pop(context, true),
-                                          Fluttertoast.showToast(
-                                            msg: "Insert Successfully",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 2,
-                                          ),
-                                          fetchDataAgain()
-
-                                        }
-                                );
+                      if(widget.id == null) ...[
+                        Expanded(
+                          child: ElevatedButton(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text("Submit"),
+                            ),
+                            onPressed: () async{
+                              if ((_formKey.currentState as FormState).validate()) {
+                                if (widget.id == null){
+                                  createData(
+                                      myControllerTitle.text,
+                                      myControllerDescription.text,
+                                      DateTime.parse(dateInputStartDate.text),
+                                      DateTime.parse(dateInputEndDate.text)
+                                  );
+                                } else {
+                                  updateData(
+                                      widget.id!,
+                                      myControllerTitle.text,
+                                      myControllerDescription.text,
+                                      DateTime.parse(dateInputStartDate.text),
+                                      DateTime.parse(dateInputEndDate.text)
+                                  );
+                                }
                               }
-
-
-                            }
-                          },
+                            },
+                          ),
                         ),
-                      ),
+                      ] else ...[
+                        Expanded(
+                          child: ElevatedButton(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text("Submit"),
+                            ),
+                            onPressed: () async{
+                              if ((_formKey.currentState as FormState).validate()) {
+                                if (widget.id == null){
+                                  createData(
+                                      myControllerTitle.text,
+                                      myControllerDescription.text,
+                                      DateTime.parse(dateInputStartDate.text),
+                                      DateTime.parse(dateInputEndDate.text)
+                                  );
+                                } else {
+                                  updateData(
+                                      widget.id!,
+                                      myControllerTitle.text,
+                                      myControllerDescription.text,
+                                      DateTime.parse(dateInputStartDate.text),
+                                      DateTime.parse(dateInputEndDate.text)
+                                  );
+                                }
+
+
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 20,),
+                        Expanded(
+                          child: ElevatedButton(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text("Delete"),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red, // Background color
+                            ),
+                            onPressed: () {
+                              _delete(context);
+                            },
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -249,10 +291,100 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
     );
   }
 
+  void _delete(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: const Text(
+              'Please Confirm',
+              style: TextStyle(color: Colors.black),
+            ),
+            content: const Text(
+              'Are you sure to remove the plans?',
+              style: TextStyle(color: Colors.black),
+            ),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () async {
+                    // Remove the box
+                    await FirebaseFirestore.instance.collection('plans').doc(widget.id).delete().then(
+                            (value) => {
+                              fetchDataAgain(),
+                              Navigator.pop(context, true),
+                              showFlutterToast("Please Wait a moment"),
+                              Future.delayed(Duration(seconds: 1)).whenComplete(() => {
+                                showFlutterToast("Delete Successfully"),
+                                Navigator.pop(context, true),
+                              })
+                            });
+                    },
+                  child: const Text('Yes')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('No'))
+            ],
+          );
+        });
+  }
+
+  createData (
+      String title,
+      String notes,
+      DateTime startDate,
+      DateTime endDate,
+  ) async {
+    Map<String, dynamic> data ={
+      'title': title,
+      'notes': notes,
+      'startDate': startDate,
+      'endDate': endDate,
+    };
+
+    await FirebaseFirestore.instance.collection('plans').add(data).then(
+            (value) => {
+              fetchDataAgain(),
+              showFlutterToast("Please Wait a moment"),
+              Future.delayed(Duration(seconds: 1)).whenComplete(() => {
+              showFlutterToast("Insert Successfully"),
+                Navigator.pop(context, true),
+              })
+            });
+  }
+
+  updateData (
+      String id,
+      String title,
+      String notes,
+      DateTime startDate,
+      DateTime endDate,
+  ) async {
+    Map<String, dynamic> data ={
+      'title': title,
+      'notes': notes,
+      'startDate': startDate,
+      'endDate': endDate,
+    };
+
+    await FirebaseFirestore.instance.collection('plans').doc(id).update(data).then(
+            (value) => {
+              fetchDataAgain(),
+              showFlutterToast("Please Wait a moment"),
+              Future.delayed(Duration(seconds: 1)).whenComplete(() => {
+                showFlutterToast("Updated Successfully"),
+                Navigator.pop(context, true),
+              })
+            });
+  }
+
   Future fetchDataAgain() async{
 
-    var fireStoreDatabase = FireStoreDataBase();
-    var snapshot = await fireStoreDatabase.getData();
+    var snapshot = await FireStoreDataBase().getData();
     List<Notes> savedList = [];
 
     savedList.clear();
@@ -274,9 +406,18 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
       savedList.add(toDoList);
     }
     final String encodeData = Notes.encode(savedList);
-    SharePreferenceHelper.saveListData(encodeData);
+    await SharePreferenceHelper.saveListData(encodeData);
 
     // final String encodeData = Notes.encode(savedList as List<Notes>);
     // return encodeData;
+  }
+
+  showFlutterToast(String msg){
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 2,
+    );
   }
 }

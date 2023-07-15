@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
 import 'package:funds_management/model/notes.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -27,8 +28,7 @@ class NotesDataSource extends CalendarDataSource {
 
   @override
   Color getColor(int index) {
-    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0)
-    ;
+    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
   }
 
   @override

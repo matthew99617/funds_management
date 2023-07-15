@@ -21,12 +21,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static List<Notes> savedList = [];
 
-  @override
-  void initState() {
-    super.initState();
-    loadData();
-  }
-
   Future loadData() async{
     final dataStr = await SharePreferenceHelper.getListData();
     setState(() {
@@ -57,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    loadData();
     return Scaffold(
         body: SafeArea(
           child: Padding(
@@ -70,10 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        "Forward Plans",
+                        "Forward Plans(${DateTime.now().month})",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 30,
+                          fontSize: 28,
                         ),
                       ),
                       IconButton(
