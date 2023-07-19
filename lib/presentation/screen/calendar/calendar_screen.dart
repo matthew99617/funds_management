@@ -65,6 +65,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: content(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => {
