@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:funds_management/presentation/router/router.gr.dart';
 import 'package:funds_management/shared/share_preference_helper.dart';
@@ -14,14 +19,33 @@ import 'model/retrieve_data_with_id_notes.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: FirebaseOptions(
-        apiKey: "AIzaSyBUegZyaOr-2A3Lh9jv1bpXmJXuTmqVF3I",
-        authDomain: "fundsmanagement-d7680.firebaseapp.com",
-        projectId: "fundsmanagement-d7680",
-        storageBucket: "fundsmanagement-d7680.appspot.com",
-        messagingSenderId: "442474534389",
-        appId: "1:442474534389:web:f53a2fd59951006984fcbc",
-        measurementId: "G-ZRNMV4BXQQ",
+    options: (Platform.isIOS) ?
+    FirebaseOptions(
+      apiKey: "AIzaSyCRWh1knqLV6v3ddVhMQn1MLrvfOwIASmE",
+      authDomain: "fundsmanagement-d7680.firebaseapp.com",
+      projectId: "fundsmanagement-d7680",
+      storageBucket: "fundsmanagement-d7680.appspot.com",
+      messagingSenderId: "442474534389",
+      appId: "1:442474534389:ios:44c2db611e0c1c2384fcbc",
+      measurementId: "G-ZRNMV4BXQQ",
+    ) : (Platform.isAndroid) ?
+    FirebaseOptions(
+      apiKey: "AIzaSyDba3Hiyd-b2AxqxvVmacTkoiPEq7IUk4Q",
+      authDomain: "fundsmanagement-d7680.firebaseapp.com",
+      projectId: "fundsmanagement-d7680",
+      storageBucket: "fundsmanagement-d7680.appspot.com",
+      messagingSenderId: "442474534389",
+      appId: "1:442474534389:android:7023e58d5034fb8384fcbc",
+      measurementId: "G-ZRNMV4BXQQ",
+    ) :
+    FirebaseOptions(
+      apiKey: "AIzaSyBUegZyaOr-2A3Lh9jv1bpXmJXuTmqVF3I",
+      authDomain: "fundsmanagement-d7680.firebaseapp.com",
+      projectId: "fundsmanagement-d7680",
+      storageBucket: "fundsmanagement-d7680.appspot.com",
+      messagingSenderId: "442474534389",
+      appId: "1:442474534389:web:f53a2fd59951006984fcbc",
+      measurementId: "G-ZRNMV4BXQQ",
     )
   );
   await ConfigReader.initializeApp(Environment.dev);
