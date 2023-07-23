@@ -1,25 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Record{
-  final DateTime dateTime;
-  final String purchaseItem;
+  final DateTime purchaseDate;
   final String description;
-  final String type;
-  final bool isChecked;
+  final double amount;
+  late final bool checkedBox;
+  final String imageUrl;
 
   Record({
-    required this.purchaseItem,
-    required this.dateTime,
+    required this.purchaseDate,
     required this.description,
-    required this.type,
-    required this.isChecked,
+    required this.amount,
+    required this.checkedBox,
+    this.imageUrl = '',
   });
 
-  factory Record.fromJson(Map<String, dynamic> json){
-    return Record(
-      purchaseItem: json[''],
-      dateTime: json[''],
-      description: json[''],
-      type: json[''],
-      isChecked: json[false]
-    );
-  }
+  Record.fromMap(Map<String, dynamic> data)
+      : purchaseDate = (data['purchaseDate'] as Timestamp).toDate(),
+        description = data['description'],
+        amount = data['amount'].toDouble(),
+        checkedBox = data['checkedBox'],
+        imageUrl = data['imageUrl'];
+
+  Map<String, dynamic> toMap() => {
+    'purchaseDate': Timestamp.fromDate(purchaseDate),
+    'description': description,
+    'amount': amount,
+    'checkedBox': checkedBox,
+    'imageUrl': imageUrl,
+  };
 }
