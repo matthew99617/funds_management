@@ -83,210 +83,218 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   Widget build(BuildContext context) {
     return Wrap(
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(30),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                widget.notes == null
-                    ? Text('Add Event', style: TextStyle(fontSize: 25.0),)
-                    : Text('Edit Event', style: TextStyle( fontSize: 25.0),),
-                SizedBox(height: 15.0),
-                TextFormField(
-                  controller: myControllerTitle,
-                  decoration: InputDecoration(
-                    labelText: 'Title',
-                    hintText: widget.title != null ? '${widget.title}' : 'Please Input Descriptions',
-                  ),
-                  validator: (v) {
-                    return v!.trim().isNotEmpty ? null : "You don't have any change on Title!!";
-                  },
-                ),
-                SizedBox(height: 10,),
-                TextFormField(
-                  autofocus: true,
-                  controller: myControllerDescription,
-                  decoration: InputDecoration(
-                    labelStyle: TextStyle(
-                        color: Colors.white
+        SafeArea(
+            child: Container(
+              padding: EdgeInsets.only(
+                top: 20,
+                right: 20,
+                left: 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    widget.notes == null
+                        ? Text('Add Event', style: TextStyle(fontSize: 25.0),)
+                        : Text('Edit Event', style: TextStyle( fontSize: 25.0),),
+                    SizedBox(height: 15.0),
+                    TextFormField(
+                      autofocus: true,
+                      controller: myControllerTitle,
+                      decoration: InputDecoration(
+                        labelText: 'Title',
+                        hintText: widget.title != null ? '${widget.title}' : 'Please Input Descriptions',
+                      ),
+                      validator: (v) {
+                        return v!.trim().isNotEmpty ? null : "You don't have any change on Title!!";
+                      },
                     ),
-                    hintStyle: TextStyle(
-                      color: Colors.grey[800],
+                    SizedBox(height: 10,),
+                    TextFormField(
+                      controller: myControllerDescription,
+                      decoration: InputDecoration(
+                        labelStyle: TextStyle(
+                            color: Colors.white
+                        ),
+                        hintStyle: TextStyle(
+                          color: Colors.grey[800],
+                        ),
+                        labelText: 'Descriptions',
+                        hintText: widget.notes != null ? '${widget.notes}' : 'Please Input Descriptions',
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      validator: (v) {
+                        return v!.trim().isNotEmpty ? null : "You don't have any change on Descriptions!!";
+                      },
                     ),
-                    labelText: 'Descriptions',
-                    hintText: widget.notes != null ? '${widget.notes}' : 'Please Input Descriptions',
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  validator: (v) {
-                    return v!.trim().isNotEmpty ? null : "You don't have any change on Descriptions!!";
-                  },
-                ),
-                TextFormField(
-                  controller: dateInputStartDate, //editing controller of this TextField
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today), //icon of text field
-                    labelText: "Start Date", //label text of field
-                  ),
-                  readOnly: true,  //set it true, so that user will not able to edit text
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: firstYear,
-                      lastDate: lastYear,
-                    );
+                    TextFormField(
+                      controller: dateInputStartDate, //editing controller of this TextField
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today), //icon of text field
+                        labelText: "Start Date", //label text of field
+                      ),
+                      readOnly: true,  //set it true, so that user will not able to edit text
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: firstYear,
+                          lastDate: lastYear,
+                        );
 
-                    if(pickedDate != null){
-                      print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(formattedDate); //formatted date output using intl package =>  2021-03-16
-                      //you can implement different kind of Date Format here according to your requirement
+                        if(pickedDate != null){
+                          print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                          print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                          //you can implement different kind of Date Format here according to your requirement
 
-                      setState(() {
-                        dateInputStartDate.text = formattedDate; //set output date to TextField value.
-                      });
-                    }else{
-                      print("Date is not selected");
-                    }
-                  },
-                  validator: (v) {
-                    return v!.trim().isNotEmpty ? null : "You don't have any change on StartDate!!";
-                  },
-                ),
-                TextFormField(
-                  controller: dateInputEndDate, //editing controller of this TextField
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today,), //icon of text field
-                    labelText: "End Date", //label text of field
-                  ),
-                  readOnly: true,  //set it true, so that user will not able to edit text
-                  onTap: () async {
-                    if (dateInputStartDate != null){
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: lastYear,
-                      );
+                          setState(() {
+                            dateInputStartDate.text = formattedDate; //set output date to TextField value.
+                          });
+                        }else{
+                          print("Date is not selected");
+                        }
+                      },
+                      validator: (v) {
+                        return v!.trim().isNotEmpty ? null : "You don't have any change on StartDate!!";
+                      },
+                    ),
+                    TextFormField(
+                      controller: dateInputEndDate, //editing controller of this TextField
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today,), //icon of text field
+                        labelText: "End Date", //label text of field
+                      ),
+                      readOnly: true,  //set it true, so that user will not able to edit text
+                      onTap: () async {
+                        if (dateInputStartDate != null){
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: lastYear,
+                          );
 
-                      if(pickedDate != null){
-                        print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                          if(pickedDate != null){
+                            print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                            String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                            print(formattedDate); //formatted date output using intl package =>  2021-03-16
 
-                        setState(() {
-                          dateInputEndDate.text = formattedDate; //set output date to TextField value.
-                        });
-                      }else{
-                        print("Date is not selected");
-                      }
-                    } else {
-                      setState(() {
-                        dateInputEndDate.text = "You Should pick up the Start Date first";
-                      });
-                    }
-                  },
-                  validator: (v) {
-                    if (!v!.trim().isNotEmpty){
-                      return "You don't have any change on EndDate!!";
-                    } else if (DateTime.parse(dateInputEndDate.text).isBefore(DateTime.parse(dateInputStartDate.text))){
-                      return "You cannot input before StartDate";
-                    }
+                            setState(() {
+                              dateInputEndDate.text = formattedDate; //set output date to TextField value.
+                            });
+                          }else{
+                            print("Date is not selected");
+                          }
+                        } else {
+                          setState(() {
+                            dateInputEndDate.text = "You Should pick up the Start Date first";
+                          });
+                        }
+                      },
+                      validator: (v) {
+                        if (!v!.trim().isNotEmpty){
+                          return "You don't have any change on EndDate!!";
+                        } else if (DateTime.parse(dateInputEndDate.text).isBefore(DateTime.parse(dateInputStartDate.text))){
+                          return "You cannot input before StartDate";
+                        }
 
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10,),
-                Text(temp.toString()),
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0),
-                  child: Row(
-                    children: <Widget>[
-                      if(widget.id == null) ...[
-                        Expanded(
-                          child: ElevatedButton(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text("Submit"),
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 10,),
+                    Text(temp.toString()),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 28.0),
+                      child: Row(
+                        children: <Widget>[
+                          if(widget.id == null) ...[
+                            Expanded(
+                              child: ElevatedButton(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text("Submit"),
+                                ),
+                                onPressed: () async{
+                                  if ((_formKey.currentState as FormState).validate()) {
+                                    if (widget.id == null){
+                                      createData(
+                                          myControllerTitle.text,
+                                          myControllerDescription.text,
+                                          DateTime.parse(dateInputStartDate.text),
+                                          DateTime.parse(dateInputEndDate.text)
+                                      );
+                                    } else {
+                                      updateData(
+                                          widget.id!,
+                                          myControllerTitle.text,
+                                          myControllerDescription.text,
+                                          DateTime.parse(dateInputStartDate.text),
+                                          DateTime.parse(dateInputEndDate.text)
+                                      );
+                                    }
+                                  }
+                                },
+                              ),
                             ),
-                            onPressed: () async{
-                              if ((_formKey.currentState as FormState).validate()) {
-                                if (widget.id == null){
-                                  createData(
-                                      myControllerTitle.text,
-                                      myControllerDescription.text,
-                                      DateTime.parse(dateInputStartDate.text),
-                                      DateTime.parse(dateInputEndDate.text)
-                                  );
-                                } else {
-                                  updateData(
-                                      widget.id!,
-                                      myControllerTitle.text,
-                                      myControllerDescription.text,
-                                      DateTime.parse(dateInputStartDate.text),
-                                      DateTime.parse(dateInputEndDate.text)
-                                  );
-                                }
-                              }
-                            },
-                          ),
-                        ),
-                      ] else ...[
-                        Expanded(
-                          child: ElevatedButton(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text("Submit"),
-                            ),
-                            onPressed: () async{
-                              if ((_formKey.currentState as FormState).validate()) {
-                                if (widget.id == null){
-                                  createData(
-                                      myControllerTitle.text,
-                                      myControllerDescription.text,
-                                      DateTime.parse(dateInputStartDate.text),
-                                      DateTime.parse(dateInputEndDate.text)
-                                  );
-                                } else {
-                                  updateData(
-                                      widget.id!,
-                                      myControllerTitle.text,
-                                      myControllerDescription.text,
-                                      DateTime.parse(dateInputStartDate.text),
-                                      DateTime.parse(dateInputEndDate.text)
-                                  );
-                                }
+                          ] else ...[
+                            Expanded(
+                              child: ElevatedButton(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text("Submit"),
+                                ),
+                                onPressed: () async{
+                                  if ((_formKey.currentState as FormState).validate()) {
+                                    if (widget.id == null){
+                                      createData(
+                                          myControllerTitle.text,
+                                          myControllerDescription.text,
+                                          DateTime.parse(dateInputStartDate.text),
+                                          DateTime.parse(dateInputEndDate.text)
+                                      );
+                                    } else {
+                                      updateData(
+                                          widget.id!,
+                                          myControllerTitle.text,
+                                          myControllerDescription.text,
+                                          DateTime.parse(dateInputStartDate.text),
+                                          DateTime.parse(dateInputEndDate.text)
+                                      );
+                                    }
 
 
-                              }
-                            },
-                          ),
-                        ),
-                        SizedBox(width: 20,),
-                        Expanded(
-                          child: ElevatedButton(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text("Delete"),
+                                  }
+                                },
+                              ),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red, // Background color
+                            SizedBox(width: 20,),
+                            Expanded(
+                              child: ElevatedButton(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text("Delete"),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red, // Background color
+                                ),
+                                onPressed: () {
+                                  _delete(context);
+                                },
+                              ),
                             ),
-                            onPressed: () {
-                              _delete(context);
-                            },
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+        )
       ],
     );
   }
