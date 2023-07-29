@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
-import 'package:funds_management/presentation/screen/record/component/MonthListItem.dart';
+import 'package:funds_management/model/record.dart';
 
-import '../../../model/record.dart';
-import '../../../shared/icons_data.dart';
+import '../../../model/basic_month.dart';
+import '../../../shared/share_preference_helper.dart';
+import 'component/record_bottom_sheet.dart';
 
 class RecordScreen extends StatefulWidget {
   RecordScreen({Key? key}) : super(key: key);
@@ -16,231 +18,78 @@ class RecordScreen extends StatefulWidget {
 
 class _RecordScreenState extends State<RecordScreen> {
 
-  final _formKey = GlobalKey<FormState>();
-  final _dateController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _amountController = TextEditingController();
-  final _checkedBoxController = TextEditingController();
-  final _imageUrlController = TextEditingController();
   final ScrollController scrollController = ScrollController();
 
   CollectionReference recordReference =
   FirebaseFirestore.instance.collection('records');
 
-  List<Record> _recordList = [];
+  static List<double> totalAmount = [];
+  static List<Record> _recordList = [];
+  static List<DateTime> previousSixMonth = [];
+  static List<BasicMonth> basicMonth = [];
+  static String currentTotalAmount = "";
 
   @override
   void initState() {
+    loadData();
     super.initState();
-    _fetchExpenses();
   }
 
-  void _fetchExpenses() async {
-    QuerySnapshot snapshot = await recordReference.get();
+  Future loadData() async{
+    final dataStr = await SharePreferenceHelper.getRecordData();
     setState(() {
-      _recordList = snapshot.docs.map((doc) => Record.fromMap(doc.data() as Map<String ,dynamic>)).toList();
+      _recordList = Record.decode(dataStr);
+      getSixMonthAgo();
     });
   }
 
-  void _addExpense() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Add Record'),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: _dateController,
-                  decoration: InputDecoration(hintText: 'Purchase Date'),
-                  onTap: () async {
-                    DateTime? date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (date != null) {
-                      _dateController.text = date.toIso8601String().substring(0, 10);
-                    }
-                  },
-                ),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(hintText: 'Description'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter description';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _amountController,
-                  decoration: InputDecoration(hintText: 'Amount'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter amount';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _checkedBoxController,
-                  decoration: InputDecoration(hintText: 'Checked Box'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter checked box';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _imageUrlController,
-                  decoration: InputDecoration(hintText: 'Image URL'),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  Record record = Record(
-                    purchaseDate: DateTime.parse(_dateController.text),
-                    description: _descriptionController.text,
-                    amount: double.parse(_amountController.text),
-                    checkedBox: _checkedBoxController.text == '1',
-                    imageUrl: _imageUrlController.text,
-                  );
-                  await recordReference.add(record.toMap());
-                  _fetchExpenses();
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Save'),
-            ),
-          ],
-        );
-      },
-    );
+  void getSixMonthAgo() {
+    basicMonth.clear();
+    previousSixMonth.clear();
+    var now = DateTime.now();
+    for (int i = 0; i < 6; i++) {
+      final previousMonth = DateTime(now.year, now.month - i, 1);
+
+      // 如果當前月份為1月或3月，並且上一個月份為12月或2月，需要進行特殊處理
+      if ((now.month == 1 || now.month == 3) && previousMonth.month == 12 - i) {
+        previousMonth.subtract(Duration(days: 365));
+        previousSixMonth.add(previousMonth);
+      } else {
+        previousSixMonth.add(previousMonth);
+      }
+    }
+
+    setState(() {
+      Decimal temp = Decimal.parse("0");
+
+      previousSixMonth.forEach((dateTime) {
+        for (var i = 0; i < _recordList.length; i++){
+          if (dateTime.month == _recordList[i].purchaseDate.month){
+            basicMonth.add(
+              BasicMonth(
+                month: dateTime.month,
+                record: _recordList[i],
+              ),
+            );
+          }
+        }
+      });
+      for (int i = 0; i < basicMonth.length; i++){
+        if (basicMonth[i].record.isPaid){
+          temp += Decimal.parse("${basicMonth[i].record.amount}");
+        }
+      }
+      currentTotalAmount = temp.toString();
+    });
   }
 
-  void _updateExpense(Record data) {
-    _dateController.text = data.purchaseDate.toIso8601String().substring(0, 10);
-    _descriptionController.text = data.description;
-    _amountController.text = data.amount.toString();
-    _checkedBoxController.text = data.checkedBox ? '1' :'0';
-    _imageUrlController.text = data.imageUrl;
+  static List<Record> sortByDay(List<Record> dates) {
+    dates.sort((a, b) {
+      int startComparison = b.purchaseDate.compareTo(a.purchaseDate);
+      return startComparison;
+    });
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Update Record'),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: _dateController,
-                  decoration: InputDecoration(hintText: 'Purchase Date'),
-                  onTap: () async {
-                    DateTime? date = await showDatePicker(
-                      context: context,
-                      initialDate: data.purchaseDate,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (date != null) {
-                      _dateController.text = date.toIso8601String().substring(0, 10);
-                    }
-                  },
-                ),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(hintText: 'Description'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter description';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _amountController,
-                  decoration: InputDecoration(hintText: 'Amount'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter amount';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _checkedBoxController,
-                  decoration: InputDecoration(hintText: 'Checked Box'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter checked box';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _imageUrlController,
-                  decoration: InputDecoration(hintText: 'Image URL'),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  Record updatedRecord = Record(
-                    purchaseDate: DateTime.parse(_dateController.text),
-                    description: _descriptionController.text,
-                    amount: double.parse(_amountController.text),
-                    checkedBox: _checkedBoxController.text == '1',
-                    imageUrl: _imageUrlController.text,
-                  );
-                  await recordReference.doc(data.purchaseDate.toString()).update(updatedRecord.toMap());
-                  _fetchExpenses();
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Save'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _deleteExpense(Record record) async {
-    await recordReference.doc(record.purchaseDate.toString()).delete();
-    _fetchExpenses();
+    return dates;
   }
 
   @override
@@ -264,6 +113,18 @@ class _RecordScreenState extends State<RecordScreen> {
                         fontSize: 28,
                       ),
                     ),
+                    currentTotalAmount.contains("-")
+                        ? Text(
+                      "Total: -\$${stringToOnlyAmount(currentTotalAmount)}",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ) : Text(
+                      "Total: \$${stringToOnlyAmount(currentTotalAmount)}",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -271,18 +132,245 @@ class _RecordScreenState extends State<RecordScreen> {
                 thickness: 1,
               ),
               SizedBox(height: 2),
-              // MonthListItem(
-              //     month: ,
-              //     records: _recordList,
-              // )
+              /**
+               *  ExpansionTile
+               */
+
+              buildList()
             ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _addExpense,
+          onPressed: () => {
+            showModalBottomSheet<void>(
+                useRootNavigator: true,
+                context: context,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(45.0),
+                    )
+                ),
+                builder: (context) {
+                  return RecordBottomSheet();
+                }
+            ).whenComplete(() => loadData(),),
+          },
           child: Icon(Icons.add),
         ),
       ),
     );
+  }
+
+  Widget buildList(){
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        itemCount: previousSixMonth.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ExpansionTile(
+            // change to english
+            title: Text(
+              changeMonthFromNumberToString(previousSixMonth[index].month),
+            ),
+            leading:
+            calculateCurrentMonthAmount(previousSixMonth[index].month) < 0
+                ? Text(
+                  "-\$${toOnlyAmount(calculateCurrentMonthAmount(previousSixMonth[index].month))}",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.red,
+                ),
+            ) : Text(
+              "\$${toOnlyAmount(calculateCurrentMonthAmount(previousSixMonth[index].month))}",
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.lightGreen,
+              ),
+            ),
+            children: [
+              buildRecordList(previousSixMonth[index].month)
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  String changeMonthFromNumberToString(int month){
+    switch(month){
+      case 1: return "January";
+      case 2: return "February";
+      case 3: return "March";
+      case 4: return "April";
+      case 5: return "May";
+      case 6: return "June";
+      case 7: return "July";
+      case 8: return "August";
+      case 9: return "September";
+      case 10: return "October";
+      case 11: return "November";
+      case 12: return "December";
+      default: return "";
+    }
+  }
+
+  Widget buildRecordList(int month){
+    List<Record> currentMonth = [];
+    for (var i = 0; i < basicMonth.length; i++){
+      if (basicMonth[i].month == month){
+        currentMonth.add(basicMonth[i].record);
+      }
+    }
+    currentMonth = sortByDay(currentMonth);
+    return currentMonth.length == 0 ?
+    Container(
+      height: MediaQuery.of(context).size.height *0.2,
+      width: MediaQuery.of(context).size.width,
+      child: Center(
+        child: Text("No Record in ${changeMonthFromNumberToString(month)}"),
+      ),
+    ) : ListView.separated(
+      physics: NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: currentMonth.length,
+      itemBuilder: (BuildContext context, int index) {
+         return Container(
+           padding: EdgeInsets.all(16.0),
+           child: InkWell(
+             onTap: () {
+               onClickList(currentMonth[index]);
+             },
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 Row(
+                   children: [
+                     Text(
+                         "${currentMonth[index].description}",
+                         style: TextStyle(
+                           fontSize: 24.0,
+                           fontWeight: FontWeight.bold,
+                         )
+                     ),
+                   ],
+                 ),
+                 SizedBox(height: 8.0),
+                 currentMonth[index].amount < 0
+                     ? Text('Amount: -\$${toOnlyAmount(currentMonth[index].amount)}',
+                   style: TextStyle(
+                     fontSize: 16.0,
+                     fontWeight: FontWeight.normal,
+                     color: Colors.red,
+                   ),
+                 ) : Text('Amount: \$${currentMonth[index].amount}',
+                   style: TextStyle(
+                     fontSize: 16.0,
+                     fontWeight: FontWeight.normal,
+                     color: Colors.lightGreen,
+                   ),
+                 ),
+                 SizedBox(height: 8.0),
+                 Text('Purchase Date: ${toFormat(currentMonth[index].purchaseDate.year, currentMonth[index].purchaseDate.month, currentMonth[index].purchaseDate.day)}',
+                     style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal)),
+                 SizedBox(height: 8.0,),
+                 Row(
+                   children: <Widget>[
+                     Text(
+                       "Paid?",
+                       style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+                     ),
+                     Checkbox(
+                       value: currentMonth[index].isPaid,
+                       onChanged: null,
+                       checkColor: Colors.blue,
+                       fillColor: null,
+                     )
+                   ],
+                 ),
+                 SizedBox(height: 8.0,),
+                 Text(
+                   "Remark: ${currentMonth[index].remark}",
+                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+                 ),
+               ],
+             ),
+           ),
+         );
+
+      },
+      separatorBuilder: (BuildContext context, int index) =>
+      const Divider(
+        // color: Colors.black,
+        thickness: 2,
+      ),
+    );
+  }
+
+  String toOnlyAmount(double amount){
+    return amount.toString().replaceAll("-", "");
+  }
+
+  String stringToOnlyAmount(String amount){
+    return amount.replaceAll("-", "");
+  }
+
+  String toFormat(int yy, int mm, int dd){
+    return "$yy/$mm/$dd";
+  }
+
+  double calculateCurrentMonthAmount(int month){
+    late Decimal currentMonthAmount = Decimal.parse("0");
+    for (int i = 0; i < basicMonth.length; i++){
+      if (basicMonth[i].record.isPaid){
+        if (basicMonth[i].month == month){
+          currentMonthAmount += Decimal.parse('${basicMonth[i].record.amount}');
+        }
+      }
+    }
+
+    totalAmount.add(currentMonthAmount.toDouble());
+    if (currentMonthAmount.toDouble() < 0){
+      return currentMonthAmount.toDouble();
+    } else {
+      return currentMonthAmount.toDouble();
+    }
+  }
+
+  void calculateCurrentTotalAmount() {
+    setState(() {
+      totalAmount.clear();
+      Decimal calculateTotalAmount = Decimal.parse("0");
+      for (int i = 0; i < totalAmount.length; i++) {
+        calculateTotalAmount += Decimal.parse("${totalAmount[i]}");
+      }
+      print(calculateTotalAmount);
+      currentTotalAmount = toOnlyAmount(calculateTotalAmount.toDouble());
+    });
+  }
+
+  void onClickList(Record record){
+    showModalBottomSheet<void>(
+      useRootNavigator: true,
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(45.0),
+          )
+      ),
+      builder: (context) {
+        return RecordBottomSheet(
+          id: record.id,
+          description: record.description,
+          amount: record.amount,
+          purchaseDate: record.purchaseDate,
+          isPaid: record.isPaid,
+          remark: record.remark,
+        );
+      },
+    ).whenComplete(() => loadData());
   }
 }

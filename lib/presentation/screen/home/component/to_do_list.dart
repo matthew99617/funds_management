@@ -28,8 +28,7 @@ class _ListToDoState extends State<ListToDo> {
             .size
             .width * 0.9,
         alignment: Alignment.center,
-        child: widget.toDoList.length == 0
-            ? Center(
+        child: widget.toDoList.length == 0 ? Center(
           child: Text(
             "No Forward Plan",
             style: TextStyle(
@@ -73,7 +72,6 @@ class _ListToDoState extends State<ListToDo> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(20),
         ),
         child: InkWell(
@@ -137,7 +135,6 @@ class _ListToDoState extends State<ListToDo> {
     ): Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
         borderRadius: BorderRadius.circular(20),
       ),
       child: InkWell(

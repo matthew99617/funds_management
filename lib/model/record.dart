@@ -1,32 +1,55 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
 class Record{
+  String? id;
   final DateTime purchaseDate;
   final String description;
   final double amount;
-  late final bool checkedBox;
+  late final bool isPaid;
+  final String remark;
   final String imageUrl;
 
   Record({
+    this.id,
     required this.purchaseDate,
     required this.description,
     required this.amount,
-    required this.checkedBox,
+    required this.remark,
+    required this.isPaid,
     this.imageUrl = '',
   });
 
-  Record.fromMap(Map<String, dynamic> data)
-      : purchaseDate = (data['purchaseDate'] as Timestamp).toDate(),
-        description = data['description'],
-        amount = data['amount'].toDouble(),
-        checkedBox = data['checkedBox'],
-        imageUrl = data['imageUrl'];
+  factory Record.fromMap(Map<String, dynamic> json){
+    return Record(
+      id: json['id'],
+      purchaseDate: DateTime.parse(json['purchaseDate']),
+      description: json['description'],
+      amount: json['amount'],
+      remark: json['remark'],
+      isPaid: json['isPaid'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-    'purchaseDate': Timestamp.fromDate(purchaseDate),
-    'description': description,
-    'amount': amount,
-    'checkedBox': checkedBox,
-    'imageUrl': imageUrl,
+
+  static Map<String, dynamic> toJson(Record record) => {
+    'id': record.id,
+    'purchaseDate': record.purchaseDate.toIso8601String(),
+    'description': record.description,
+    'amount': record.amount,
+    'isPaid': record.isPaid,
+    'remark': record.remark,
+    'imageUrl': record.imageUrl,
   };
+
+  static String encode(List<Record> record) => json.encode(
+    record
+        .map<Map<String, dynamic>>((record) => Record.toJson(record))
+        .toList(),
+  );
+
+  static List<Record> decode(String data) =>
+      (json.decode(data) as List<dynamic>)
+          .map<Record>((item) => Record.fromMap(item))
+          .toList();
+
 }

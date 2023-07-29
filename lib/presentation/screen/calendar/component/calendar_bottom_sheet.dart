@@ -51,32 +51,21 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   void initState() {
     super.initState();
 
-    if (widget.startDate == null){
-      dateInputStartDate.text = "";
-    } else {
+    if (widget.startDate != null){
       dateInputStartDate.text = DateFormat('yyyy-MM-dd').format(widget.startDate!);
     }
 
-    if (widget.endDate == null){
-      dateInputEndDate.text = "";
-    } else {
+    if (widget.endDate != null){
       dateInputEndDate.text = DateFormat('yyyy-MM-dd').format(widget.endDate!);
     }
 
-    myControllerTitle.addListener((){
-      _printTitle();
-    });
-    myControllerDescription.addListener((){
-      _printDescription();
-    });
-  }
+    if (widget.title != null){
+      myControllerTitle.text = widget.title.toString();
+    }
 
-  void _printTitle(){
-    print("${myControllerTitle.text}");
-  }
-
-  void _printDescription(){
-    print("${myControllerDescription.text}");
+    if (widget.notes != null){
+      myControllerDescription.text = widget.notes.toString();
+    }
   }
 
   @override
@@ -392,7 +381,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
 
   Future fetchDataAgain() async{
 
-    var snapshot = await FireStoreDataBase().getData();
+    var snapshot = await FireStoreDataBase().getPlanData();
     List<Notes> savedList = [];
 
     savedList.clear();

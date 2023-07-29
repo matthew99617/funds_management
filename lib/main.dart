@@ -1,11 +1,10 @@
-import 'dart:async';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:funds_management/model/record.dart';
+import 'package:funds_management/model/retrieve_record_data_with_id.dart';
 import 'package:funds_management/presentation/router/router.gr.dart';
 import 'package:funds_management/shared/share_preference_helper.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -68,6 +67,7 @@ class MyApp extends StatelessWidget {
 
   final AppRouter _appRouter;
   static List<Notes> savedList = [];
+  static List<Record> recordList = [];
 
   const MyApp({
     Key? key,
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: FireStoreDataBase().getData(),
+        future: FireStoreDataBase().getPlanData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done){
             savedList.clear();
@@ -102,16 +102,44 @@ class MyApp extends StatelessWidget {
             }
             final String encodeData = Notes.encode(savedList);
             SharePreferenceHelper.saveListData(encodeData);
-            return BlocBuilder<ThemeChangeCubit, ThemeChangeState>(
-              builder: (context, state) {
-                return MaterialApp.router(
-                  debugShowCheckedModeBanner: ConfigReader.config().DEBUG,
-                  theme: state.themeData,
-                  routerDelegate: _appRouter.delegate(),
-                  routeInformationParser: _appRouter.defaultRouteParser(),
-                  builder: (context, router) => router!,
+            return FutureBuilder(
+                future: FireStoreDataBase().getRecordData(),
+                builder: (context, snapshotRecord) {
+                  if (snapshotRecord.connectionState == ConnectionState.done){
+                    recordList.clear();
+                    var dataList = (snapshotRecord.data as List)
+                        .map((item) => item as RetrieveRecordDataWithID).toList();
+                    for (var result in dataList) {
+                      var list = Record(
+                        id: result.id,
+                        purchaseDate: result.record.purchaseDate,
+                        description: result.record.description,
+                        amount: result.record.amount,
+                        remark: result.record.remark,
+                        isPaid: result.record.isPaid,
+                      );
+
+                      /**
+                       *  Remember You have Filtering the Data, Just CURRENT MONTH only
+                       */
+
+                      recordList.add(list);
+                    }
+                    final String encodeData = Record.encode(recordList);
+                    SharePreferenceHelper.saveRecordData(encodeData);
+                  }
+                return BlocBuilder<ThemeChangeCubit, ThemeChangeState>(
+                  builder: (context, state) {
+                    return MaterialApp.router(
+                      debugShowCheckedModeBanner: ConfigReader.config().DEBUG,
+                      theme: state.themeData,
+                      routerDelegate: _appRouter.delegate(),
+                      routeInformationParser: _appRouter.defaultRouteParser(),
+                      builder: (context, router) => router!,
+                    );
+                  },
                 );
-              },
+              }
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting){

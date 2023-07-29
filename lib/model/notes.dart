@@ -46,8 +46,4 @@ class Notes{
           .map<Notes>((item) => Notes.fromMap(item))
           .toList();
 
-  sortByDate (List<Notes> notes) {
-    notes.sort((a, b) =>
-        a.startDate.day.compareTo(b.startDate.day));
-  }
 }

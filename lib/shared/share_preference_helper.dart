@@ -29,7 +29,7 @@ class SharePreferenceHelper {
   // Read Data
   static Future getRecordData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getStringList(recordValueSharedPreferences);
+    return sharedPreferences.getString(recordValueSharedPreferences);
   }
 
   static Future saveTheme(value) async {
