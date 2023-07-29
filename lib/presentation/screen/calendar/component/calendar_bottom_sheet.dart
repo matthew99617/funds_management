@@ -94,7 +94,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                       controller: myControllerTitle,
                       decoration: InputDecoration(
                         labelText: 'Title',
-                        hintText: widget.title != null ? '${widget.title}' : 'Please Input Descriptions',
+                        hintText: widget.title != null ? '${widget.title}' : 'Please Input Title',
                       ),
                       validator: (v) {
                         return v!.trim().isNotEmpty ? null : "You don't have any change on Title!!";

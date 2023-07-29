@@ -49,6 +49,24 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList();
   }
 
+  String changeMonthFromNumberToString(int month){
+    switch(month){
+      case 1: return "January";
+      case 2: return "February";
+      case 3: return "March";
+      case 4: return "April";
+      case 5: return "May";
+      case 6: return "June";
+      case 7: return "July";
+      case 8: return "August";
+      case 9: return "September";
+      case 10: return "October";
+      case 11: return "November";
+      case 12: return "December";
+      default: return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     loadData();
@@ -65,19 +83,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        "Forward Plans(${DateTime.now().month})",
+                        "Forward Plans",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 28,
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(scanIcon),
-                        iconSize: 30,
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onPressed: () {},
-                      ),
+                      Text(
+                        "${changeMonthFromNumberToString(DateTime.now().month)}",
+                        style: TextStyle(
+                          fontSize: 28,
+                        ),
+                      )
                     ],
                   ),
                 ),

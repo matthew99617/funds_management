@@ -29,10 +29,10 @@ class _BottomNavState extends State<BottomNav> {
           icon: Icon(recordIcon,),
           label: "Record",
         ),
-        BottomNavigationBarItem(
-          icon: Icon(settingIcon),
-          label: "Setting",
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(settingIcon),
+        //   label: "Setting",
+        // ),
       ],
       currentIndex: widget.tabsRouter.activeIndex,
       onTap: widget.tabsRouter.setActiveIndex,

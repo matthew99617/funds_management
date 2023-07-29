@@ -14,7 +14,6 @@ class MainHomePage extends StatelessWidget {
         HomeRouter(),
         CalendarRouter(),
         RecordRouter(),
-        SettingRouter(),
       ],
       bottomNavigationBuilder: (context, tabsRouter) => BottomNav(
         tabsRouter: tabsRouter,

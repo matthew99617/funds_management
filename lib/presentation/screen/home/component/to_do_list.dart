@@ -75,9 +75,6 @@ class _ListToDoState extends State<ListToDo> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: InkWell(
-          onTap: () {
-            print("123");
-          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -138,9 +135,6 @@ class _ListToDoState extends State<ListToDo> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: InkWell(
-        onTap: () {
-          print("Home: 123");
-        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
