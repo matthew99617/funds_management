@@ -47,7 +47,6 @@ void main() async{
       measurementId: "G-ZRNMV4BXQQ",
     )
   );
-  await ConfigReader.initializeApp(Environment.dev);
   final _appRouter = AppRouter();
   initializeDateFormatting().then((_) => runApp(
       MultiBlocProvider(
