@@ -10,7 +10,6 @@ import 'package:funds_management/presentation/router/router.gr.dart';
 import 'package:funds_management/shared/share_preference_helper.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'bloc/cubit/theme/theme_change_cubit.dart';
-import 'config/config_reader.dart';
 import 'firebase/FireStoreDataBase.dart';
 import 'model/notes.dart';
 import 'model/retrieve_data_with_id_notes.dart';

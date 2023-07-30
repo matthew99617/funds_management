@@ -90,7 +90,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
         },
         label: Text("Add Event"),
         icon: Icon(Icons.add),
-      ) : null
+      ) : FloatingActionButton(
+        onPressed: loadData,
+        child: const Icon(Icons.refresh),
+      ),
     );
   }
 
@@ -107,7 +110,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
           onTap: havePermissions ? calendarTapped : null,
           backgroundColor: Colors.grey,
-          firstDayOfWeek: 1,
+          firstDayOfWeek: 7,
           showDatePickerButton: true,
           ),
       )

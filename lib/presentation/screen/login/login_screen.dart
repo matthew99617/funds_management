@@ -6,23 +6,49 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:funds_management/presentation/router/router.gr.dart';
 
 import '../../../firebase/FireStoreDataBase.dart';
+import '../../../shared/share_preference_helper.dart';
 
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  static bool isLogin = false;
+  static GlobalKey _formKey = GlobalKey<FormState>();
 
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     return firebaseApp;
   }
-  static GlobalKey _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    loadData();
+    super.initState();
+  }
+
+  Future loadData() async{
+    final data = await SharePreferenceHelper.getPermission();
+    setState(() {
+      isLogin = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder(
         future: _initializeFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done){
+            if (isLogin){
+              AutoRouter.of(context).push(MainHomePage());
+            }
             return Scaffold(
               body: loginPage(context),
             );

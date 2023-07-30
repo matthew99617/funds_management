@@ -98,6 +98,7 @@ class FireStoreDataBase {
         password: password,
       );
       user = userCredential.user;
+      SharePreferenceHelper.saveIsLogin(true);
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

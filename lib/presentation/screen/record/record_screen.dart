@@ -158,7 +158,10 @@ class _RecordScreenState extends State<RecordScreen> {
             ).whenComplete(() => loadData(),),
           },
           child: Icon(Icons.add),
-        ) : null
+        ) : FloatingActionButton(
+          onPressed: loadData,
+          child: const Icon(Icons.refresh),
+        ),
       ),
     );
   }

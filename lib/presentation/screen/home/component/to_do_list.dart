@@ -193,7 +193,7 @@ class _ListToDoState extends State<ListToDo> {
 
   // Calculate the DayStatus
   String _calDateStatus(DateTime startDay, DateTime endDay) {
-    final now = DateTime.utc(2023, 02, 05); // Get Today Date
+    final now = DateTime.now(); // Get Today Date
     final tmr = now.add(Duration(days: 1)); // Get the Day of Tmr
     if (isInRange(now, startDay, endDay)) {
       if (now.day == endDay.day) {

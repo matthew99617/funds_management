@@ -21,6 +21,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static List<Notes> savedList = [];
 
+  @override
+  void initState() {
+    loadData();
+    super.initState();
+  }
+
   Future loadData() async{
     final dataStr = await SharePreferenceHelper.getListData();
     setState(() {
@@ -42,11 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static List<Notes> filterDataByCurrentMonth(List<Notes> dataList) {
     final now = DateTime.now();
-    return dataList
-        .where((data) =>
-            data.startDate.month == now.month &&
-            data.startDate.year == now.year)
-        .toList();
+
+    // 遍歷 datalist，找到在 start date 前 7 天內和 end date 範圍內的數據。
+    final filteredData = dataList.where((item) {
+
+      // 如果日期在 start date 前 7 天內或在 end date 範圍內，則保留該數據。
+      return now.isAfter(item.startDate.subtract(Duration(days: 7))) && now.isBefore(item.endDate.add(Duration(days: 1)));
+    }).toList();
+
+    return filteredData;
   }
 
   String changeMonthFromNumberToString(int month){
@@ -69,8 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    loadData();
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: loadData,
+        child: const Icon(Icons.refresh),
+      ),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),

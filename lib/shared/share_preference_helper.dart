@@ -41,4 +41,14 @@ class SharePreferenceHelper {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getBool(themeValueSharedPreferences);
   }
+
+  static Future saveIsLogin(value) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.setBool(themeValueSharedPreferences, value);
+  }
+
+  static Future getIsLogin() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getBool(themeValueSharedPreferences);
+  }
 }
