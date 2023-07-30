@@ -53,6 +53,7 @@ dependencies:
   fluttertoast: ^8.2.2
   cloud_firestore: ^4.8.2
   firebase_core: ^2.14.0
+  firebase_auth: ^4.7.2
   analyzer: ^5.0.0
   need_resume: ^1.0.7+1
   connectivity_plus: ^4.0.1
