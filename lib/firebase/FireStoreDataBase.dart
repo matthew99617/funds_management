@@ -9,7 +9,6 @@ import '../model/record.dart';
 import '../shared/share_preference_helper.dart';
 
 class FireStoreDataBase {
-  static bool permissions = false;
   List toDoList = [];
   List recordList = [];
   final CollectionReference collectionPermissionRef =
@@ -112,6 +111,7 @@ class FireStoreDataBase {
   }
 
   getPermission(String email) async{
+    var permission;
     try {
       //to get data from a single/particular document alone.
       // var temp = await collectionRef.doc("<your document ID here>").get();
@@ -119,16 +119,16 @@ class FireStoreDataBase {
       // to get data from all documents sequentially
       await collectionPermissionRef.get().then((querySnapshot) {
         for (var i = 0; i < querySnapshot.docs.length; i++) {
-
-          if (querySnapshot.docs[i].get('email') == email){
-            permissions = true;
+          if (querySnapshot.docs[i].get('email').toString() == email){
+            permission = true;
+            return;
           } else {
-            permissions = false;
+            permission = false;
           }
         }
       });
 
-      SharePreferenceHelper.savePermission(permissions);
+      SharePreferenceHelper.savePermission(permission);
     } catch (e) {
       debugPrint("Error - $e");
       return null;
