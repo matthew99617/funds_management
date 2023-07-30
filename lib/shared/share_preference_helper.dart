@@ -1,12 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/notes.dart';
-
 class SharePreferenceHelper {
   static String listValueSharedPreferences = 'saveList';
   static String recordValueSharedPreferences = 'saveRecord';
-  static String themeValueSharedPreferences = 'themeData';
-
+  static String permissionRecordValueSharedPreferences = 'savePermissionRecord';
+  static String permissionCalendarValueSharedPreferences = 'savePermissionCalendar';
+  static String loginValueSharedPreferences = 'saveLogin';
+  static String emailValueSharedPreferences = 'saveEmail';
 
   // Write List DATA
   static Future<bool> saveListData(value) async {
@@ -32,23 +32,45 @@ class SharePreferenceHelper {
     return sharedPreferences.getString(recordValueSharedPreferences);
   }
 
-  static Future savePermission(value) async {
+  static Future saveRecordPermission(value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.setBool(themeValueSharedPreferences, value);
+    return sharedPreferences.setBool(permissionRecordValueSharedPreferences, value);
   }
 
-  static Future getPermission() async {
+  static Future getRecordPermission() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool(themeValueSharedPreferences);
+    return sharedPreferences.getBool(permissionRecordValueSharedPreferences);
+  }
+
+  static Future saveCalendarPermission(value) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.setBool(permissionCalendarValueSharedPreferences, value);
+  }
+
+  static Future getCalendarPermission() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getBool(permissionCalendarValueSharedPreferences);
   }
 
   static Future saveIsLogin(value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.setBool(themeValueSharedPreferences, value);
+    return sharedPreferences.setBool(loginValueSharedPreferences, value);
   }
 
   static Future getIsLogin() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool(themeValueSharedPreferences);
+    return sharedPreferences.getBool(loginValueSharedPreferences);
+  }
+
+  // Write DATA
+  static Future saveEmail(value) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return await sharedPreferences.setString(emailValueSharedPreferences, value);
+  }
+
+  // Read Data
+  static Future getEmail() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString(emailValueSharedPreferences);
   }
 }

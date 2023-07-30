@@ -35,7 +35,7 @@ class _RecordScreenState extends State<RecordScreen> {
 
   Future loadData() async{
     final dataStr = await SharePreferenceHelper.getRecordData();
-    final permission = await SharePreferenceHelper.getPermission();
+    final permission = await SharePreferenceHelper.getRecordPermission();
 
     setState(() {
       havePermissions = permission;

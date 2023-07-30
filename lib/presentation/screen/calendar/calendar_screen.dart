@@ -59,7 +59,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   Future loadData() async{
     final dataStr = await SharePreferenceHelper.getListData();
-    final permission = await SharePreferenceHelper.getPermission();
+    final permission = await SharePreferenceHelper.getCalendarPermission();
     setState(() {
       print(permission);
       havePermissions = permission;

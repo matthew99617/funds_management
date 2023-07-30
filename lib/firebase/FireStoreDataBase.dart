@@ -99,6 +99,7 @@ class FireStoreDataBase {
       );
       user = userCredential.user;
       SharePreferenceHelper.saveIsLogin(true);
+      SharePreferenceHelper.saveEmail(email);
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -121,15 +122,12 @@ class FireStoreDataBase {
       await collectionPermissionRef.get().then((querySnapshot) {
         for (var i = 0; i < querySnapshot.docs.length; i++) {
           if (querySnapshot.docs[i].get('email').toString() == email){
-            permission = true;
-            return;
-          } else {
-            permission = false;
+            SharePreferenceHelper.saveRecordPermission(querySnapshot.docs[i].get('record'));
+            SharePreferenceHelper.saveCalendarPermission(querySnapshot.docs[i].get('calendar'));
           }
         }
       });
 
-      SharePreferenceHelper.savePermission(permission);
     } catch (e) {
       debugPrint("Error - $e");
       return null;
