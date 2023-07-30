@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:funds_management/model/basic_month.dart';
 import 'package:funds_management/model/notes.dart';
 import 'package:funds_management/model/retrieve_data_with_id_notes.dart';
 import 'package:funds_management/model/retrieve_record_data_with_id.dart';
 
 import '../model/record.dart';
+import '../shared/share_preference_helper.dart';
 
 class FireStoreDataBase {
+  static bool permissions = false;
   List toDoList = [];
   List recordList = [];
+  final CollectionReference collectionPermissionRef =
+  FirebaseFirestore.instance.collection("permission");
+
   final CollectionReference collectionPlansRef =
   FirebaseFirestore.instance.collection("plans");
 
@@ -95,6 +99,7 @@ class FireStoreDataBase {
         password: password,
       );
       user = userCredential.user;
+
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -104,5 +109,29 @@ class FireStoreDataBase {
     }
 
     return user;
+  }
+
+  getPermission(String email) async{
+    try {
+      //to get data from a single/particular document alone.
+      // var temp = await collectionRef.doc("<your document ID here>").get();
+
+      // to get data from all documents sequentially
+      await collectionPermissionRef.get().then((querySnapshot) {
+        for (var i = 0; i < querySnapshot.docs.length; i++) {
+
+          if (querySnapshot.docs[i].get('email') == email){
+            permissions = true;
+          } else {
+            permissions = false;
+          }
+        }
+      });
+
+      SharePreferenceHelper.savePermission(permissions);
+    } catch (e) {
+      debugPrint("Error - $e");
+      return null;
+    }
   }
 }

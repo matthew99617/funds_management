@@ -20,14 +20,12 @@ class _RecordScreenState extends State<RecordScreen> {
 
   final ScrollController scrollController = ScrollController();
 
-  CollectionReference recordReference =
-  FirebaseFirestore.instance.collection('records');
-
   static List<double> totalAmount = [];
   static List<Record> _recordList = [];
   static List<DateTime> previousSixMonth = [];
   static List<BasicMonth> basicMonth = [];
   static String currentTotalAmount = "";
+  static bool havePermissions = false;
 
   @override
   void initState() {
@@ -37,7 +35,10 @@ class _RecordScreenState extends State<RecordScreen> {
 
   Future loadData() async{
     final dataStr = await SharePreferenceHelper.getRecordData();
+    final permission = await SharePreferenceHelper.getPermission();
+
     setState(() {
+      havePermissions = permission;
       _recordList = Record.decode(dataStr);
       getSixMonthAgo();
     });
@@ -140,7 +141,7 @@ class _RecordScreenState extends State<RecordScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: havePermissions ? FloatingActionButton(
           onPressed: () => {
             showModalBottomSheet<void>(
                 useRootNavigator: true,
@@ -157,7 +158,7 @@ class _RecordScreenState extends State<RecordScreen> {
             ).whenComplete(() => loadData(),),
           },
           child: Icon(Icons.add),
-        ),
+        ) : null
       ),
     );
   }
@@ -241,7 +242,9 @@ class _RecordScreenState extends State<RecordScreen> {
            padding: EdgeInsets.all(16.0),
            child: InkWell(
              onTap: () {
-               onClickList(currentMonth[index]);
+               if (havePermissions) {
+                 onClickList(currentMonth[index]);
+               }
              },
              child: Column(
                crossAxisAlignment: CrossAxisAlignment.start,

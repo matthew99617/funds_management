@@ -32,12 +32,12 @@ class SharePreferenceHelper {
     return sharedPreferences.getString(recordValueSharedPreferences);
   }
 
-  static Future saveTheme(value) async {
+  static Future savePermission(value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.setBool(themeValueSharedPreferences, value);
   }
 
-  static Future getTheme() async {
+  static Future getPermission() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getBool(themeValueSharedPreferences);
   }

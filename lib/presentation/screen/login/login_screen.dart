@@ -101,6 +101,7 @@ class LoginPage extends StatelessWidget {
                               context: context,
                             );
                             if (user != null) {
+                              FireStoreDataBase().getPermission(myControllerEmail.text);
                               AutoRouter.of(context).push(MainHomePage());
                             } else {
                               showFlutterToast("Login Failed");

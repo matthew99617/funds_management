@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:funds_management/firebase/FireStoreDataBase.dart';
 import 'package:funds_management/model/notes_data_source.dart';
 import 'package:funds_management/presentation/screen/calendar/component/calendar_bottom_sheet.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -16,6 +17,7 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
+  static bool havePermissions = false;
   static List<Notes> savedList = [];
   bool isOpen = false;
 
@@ -57,7 +59,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   Future loadData() async{
     final dataStr = await SharePreferenceHelper.getListData();
+    final permission = await SharePreferenceHelper.getPermission();
     setState(() {
+      print(permission);
+      havePermissions = permission;
       savedList = Notes.decode(dataStr);
     });
   }
@@ -67,7 +72,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: content(),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: havePermissions ? FloatingActionButton.extended(
         onPressed: () => {
           showModalBottomSheet<void>(
             useRootNavigator: true,
@@ -85,7 +90,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         },
         label: Text("Add Event"),
         icon: Icon(Icons.add),
-      ),
+      ) : null
     );
   }
 
@@ -100,7 +105,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             showAgenda: true,
             appointmentDisplayCount: 4,
           ),
-          onTap: calendarTapped,
+          onTap: havePermissions ? calendarTapped : null,
           backgroundColor: Colors.grey,
           firstDayOfWeek: 1,
           showDatePickerButton: true,
