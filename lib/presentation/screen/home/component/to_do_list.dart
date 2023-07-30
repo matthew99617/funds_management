@@ -47,6 +47,7 @@ class _ListToDoState extends State<ListToDo> {
             itemBuilder: (BuildContext context, int index) {
               return _buildToDoItem(
                 widget.toDoList[index].title,
+                widget.toDoList[index].notes,
                 widget.toDoList[index].startDate,
                 widget.toDoList[index].endDate,
                 _calDateStatus(widget.toDoList[index].startDate,
@@ -65,7 +66,7 @@ class _ListToDoState extends State<ListToDo> {
   }
 
   // List Product
-  Widget _buildToDoItem(String title, DateTime startDate, DateTime endDate, String status,) {
+  Widget _buildToDoItem(String title, String notes, DateTime startDate, DateTime endDate, String status,) {
     return status == "Completed" ?
     Opacity(
       opacity: 0.5,
@@ -87,7 +88,8 @@ class _ListToDoState extends State<ListToDo> {
                       softWrap: true,
                       style: TextStyle(
                         fontFamily: 'Montserret',
-                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25.0,
                       ),
                     ),
                   ),
@@ -101,6 +103,14 @@ class _ListToDoState extends State<ListToDo> {
                     ),
                   ),
                 ],
+              ),
+              SizedBox(height: 10,),
+              Text(
+                notes,
+                style: TextStyle(
+                  fontFamily: 'Montserret',
+                  fontSize: 15,
+                ),
               ),
               SizedBox(height: 10,),
               Row(
@@ -147,7 +157,8 @@ class _ListToDoState extends State<ListToDo> {
                     softWrap: true,
                     style: TextStyle(
                       fontFamily: 'Montserret',
-                      fontSize: 20.0,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -161,6 +172,14 @@ class _ListToDoState extends State<ListToDo> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(height: 10,),
+            Text(
+              notes,
+              style: TextStyle(
+                fontFamily: 'Montserret',
+                fontSize: 15,
+              ),
             ),
             SizedBox(height: 10,),
             Row(

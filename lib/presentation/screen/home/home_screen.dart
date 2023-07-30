@@ -52,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // 遍歷 datalist，找到在 start date 前 7 天內和 end date 範圍內的數據。
     final filteredData = dataList.where((item) {
 
-      // 如果日期在 start date 前 7 天內或在 end date 範圍內，則保留該數據。
-      return now.isAfter(item.startDate.subtract(Duration(days: 7))) && now.isBefore(item.endDate.add(Duration(days: 1)));
+      // 如果日期在 start date 前 30 天內或在 end date 範圍內，則保留該數據。
+      return now.isAfter(item.startDate.subtract(Duration(days: 30))) && now.isBefore(item.endDate.add(Duration(days: 1)));
     }).toList();
 
     return filteredData;
