@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future loadData() async{
-    final data = await SharePreferenceHelper.getPermission();
+    final data = await SharePreferenceHelper.getIsLogin();
     setState(() {
       isLogin = data;
     });
