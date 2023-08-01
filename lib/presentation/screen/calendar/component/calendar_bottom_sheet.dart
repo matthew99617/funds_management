@@ -209,22 +209,12 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                                 ),
                                 onPressed: () async{
                                   if ((_formKey.currentState as FormState).validate()) {
-                                    if (widget.id == null){
-                                      createData(
-                                          myControllerTitle.text,
-                                          myControllerDescription.text,
-                                          DateTime.parse(dateInputStartDate.text),
-                                          DateTime.parse(dateInputEndDate.text)
-                                      );
-                                    } else {
-                                      updateData(
-                                          widget.id!,
-                                          myControllerTitle.text,
-                                          myControllerDescription.text,
-                                          DateTime.parse(dateInputStartDate.text),
-                                          DateTime.parse(dateInputEndDate.text)
-                                      );
-                                    }
+                                    createData(
+                                        myControllerTitle.text,
+                                        myControllerDescription.text,
+                                        DateTime.parse(dateInputStartDate.text),
+                                        DateTime.parse(dateInputEndDate.text)
+                                    );
                                   }
                                 },
                               ),
@@ -234,28 +224,17 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                               child: ElevatedButton(
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
-                                  child: Text("Submit"),
+                                  child: Text("Update"),
                                 ),
                                 onPressed: () async{
                                   if ((_formKey.currentState as FormState).validate()) {
-                                    if (widget.id == null){
-                                      createData(
-                                          myControllerTitle.text,
-                                          myControllerDescription.text,
-                                          DateTime.parse(dateInputStartDate.text),
-                                          DateTime.parse(dateInputEndDate.text)
-                                      );
-                                    } else {
-                                      updateData(
-                                          widget.id!,
-                                          myControllerTitle.text,
-                                          myControllerDescription.text,
-                                          DateTime.parse(dateInputStartDate.text),
-                                          DateTime.parse(dateInputEndDate.text)
-                                      );
-                                    }
-
-
+                                    updateData(
+                                        widget.id!,
+                                        myControllerTitle.text,
+                                        myControllerDescription.text,
+                                        DateTime.parse(dateInputStartDate.text),
+                                        DateTime.parse(dateInputEndDate.text)
+                                    );
                                   }
                                 },
                               ),

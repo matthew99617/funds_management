@@ -212,7 +212,8 @@ class _ListToDoState extends State<ListToDo> {
 
   // Calculate the DayStatus
   String _calDateStatus(DateTime startDay, DateTime endDay) {
-    final now = DateTime.now(); // Get Today Date
+    final now = DateTime.utc(2023, 8, 5); // Get Today Date
+    print(now);
     final tmr = now.add(Duration(days: 1)); // Get the Day of Tmr
     if (isInRange(now, startDay, endDay)) {
       if (now.day == endDay.day) {
@@ -230,7 +231,7 @@ class _ListToDoState extends State<ListToDo> {
 
   // Check the Date isInRange or not
   bool isInRange(DateTime now, DateTime start, DateTime end) {
-    return now.isAfter(start.subtract(const Duration(days: 1))) &&
+    return now.isAfter(start.subtract(const Duration(days: 0))) &&
         now.isBefore(end.add(const Duration(days: 1)));
   }
 

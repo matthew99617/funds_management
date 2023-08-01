@@ -32,6 +32,11 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  void loadEmail() async{
+    final data = await SharePreferenceHelper.getEmail();
+    FireStoreDataBase().getPermission(data);
+  }
+
   Future loadData() async{
     final data = await SharePreferenceHelper.getIsLogin();
     setState(() {
@@ -47,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done){
             if (isLogin){
+              loadEmail();
               AutoRouter.of(context).push(MainHomePage());
             }
             return Scaffold(

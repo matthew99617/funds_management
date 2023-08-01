@@ -113,7 +113,6 @@ class FireStoreDataBase {
   }
 
   getPermission(String email) async{
-    var permission;
     try {
       //to get data from a single/particular document alone.
       // var temp = await collectionRef.doc("<your document ID here>").get();
