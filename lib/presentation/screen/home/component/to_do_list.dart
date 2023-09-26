@@ -216,11 +216,11 @@ class _ListToDoState extends State<ListToDo> {
     print(now);
     final tmr = now.add(Duration(days: 1)); // Get the Day of Tmr
     if (isInRange(now, startDay, endDay)) {
-      if (now.day == endDay.day) {
-        return "Last Day";
-      } else {
+      if (now.day == startDay.day && now.day == endDay.day) {
         return "Today";
-      }
+      } else if (now.day == endDay.day && now.day != startDay.day){
+        return "Last Day";
+      } else "Processing";
     } else if (tmr.day == startDay.day) {
       return "Tomorrow";
     } else if (endDay.isBefore(now)) {

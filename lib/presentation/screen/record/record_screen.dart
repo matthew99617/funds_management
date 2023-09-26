@@ -63,6 +63,26 @@ class _RecordScreenState extends State<RecordScreen> {
     setState(() {
       Decimal temp = Decimal.parse("0");
 
+      for (var i = 0; i < _recordList.length; i++){
+        basicMonth.add(
+          BasicMonth(
+            month: _recordList[i].purchaseDate.month,
+            record: _recordList[i],
+          ),
+        );
+      }
+
+      for (int i = 0; i < basicMonth.length; i++){
+        if (basicMonth[i].record.isPaid){
+          temp += Decimal.parse("${basicMonth[i].record.amount}");
+        }
+      }
+
+      currentTotalAmount = temp.toString();
+      print(currentTotalAmount
+      );
+      basicMonth.clear();
+
       previousSixMonth.forEach((dateTime) {
         for (var i = 0; i < _recordList.length; i++){
           if (dateTime.month == _recordList[i].purchaseDate.month){
@@ -75,12 +95,6 @@ class _RecordScreenState extends State<RecordScreen> {
           }
         }
       });
-      for (int i = 0; i < basicMonth.length; i++){
-        if (basicMonth[i].record.isPaid){
-          temp += Decimal.parse("${basicMonth[i].record.amount}");
-        }
-      }
-      currentTotalAmount = temp.toString();
     });
   }
 
